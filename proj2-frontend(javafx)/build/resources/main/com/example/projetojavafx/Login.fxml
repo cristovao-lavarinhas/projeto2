@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Pos?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.projetojavafx.Controller.LoginController" stylesheets="@style.css">
+
+    <VBox spacing="20" alignment="CENTER" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" style="-fx-background-color: #f5f6fa;">
+
+        <!-- Logotipo -->
+        <!-- <ImageView fx:id="logoImageView" fitHeight="120" preserveRatio="true" image="@icons/logotipo.png"/> -->
+
+        <!-- Formulário -->
+        <VBox spacing="15" alignment="CENTER" style="-fx-background-color: white; -fx-padding: 30; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);">
+
+            <Label text="Bem-vindo!" styleClass="login-title"/>
+
+            <TextField fx:id="emailField" promptText="Email" styleClass="login-field"/>
+
+            <PasswordField fx:id="passwordField" promptText="Password" styleClass="login-field"/>
+
+            <Button text="Entrar" onAction="#handleLogin" styleClass="login-button"/>
+
+            <Hyperlink text="Esqueceu a senha?" styleClass="forgot-password"/>
+
+        </VBox>
+
+    </VBox>
+
+</AnchorPane>
