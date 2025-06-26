@@ -1,53 +1,73 @@
 package com.example.projeto2.base.service;
 
 import com.example.projeto2.base.model.Motorista;
-import com.example.projeto2.base.repository.MotoristaRepository;
-import org.springframework.stereotype.Service;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.List;
-import java.util.Optional;
 
-@Service
 public class MotoristaService {
 
-    private final MotoristaRepository motoristaRepository;
+    private final String BASE_URL = "http://localhost:8080/motoristas";
+    private final HttpClient client = HttpClient.newHttpClient();
+    private final Gson gson = new Gson();
 
-    public MotoristaService(MotoristaRepository motoristaRepository) {
-        this.motoristaRepository = motoristaRepository;
+    public List<Motorista> getAllMotoristas() throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL))
+                .GET()
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        Type listType = new TypeToken<List<Motorista>>() {}.getType();
+        return gson.fromJson(response.body(), listType);
     }
 
-    // Listar todos os motoristas
-    public List<Motorista> listarTodos() {
-        return motoristaRepository.findAll();
+    public Motorista getMotoristaById(Long id) throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL + "/" + id))
+                .GET()
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        return gson.fromJson(response.body(), Motorista.class);
     }
 
-    // Procurar motorista por ID
-    public Optional<Motorista> procurarPorId(Long id) {
-        return motoristaRepository.findById(id);
+    public Motorista criarMotorista(Motorista motorista) throws IOException, InterruptedException {
+        String json = gson.toJson(motorista);
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL))
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(json))
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        return gson.fromJson(response.body(), Motorista.class);
     }
 
-    // Criar ou salvar um novo motorista
-    public Motorista guardar(Motorista motorista) {
-        return motoristaRepository.save(motorista);
+    public Motorista atualizarMotorista(Long id, Motorista motorista) throws IOException, InterruptedException {
+        String json = gson.toJson(motorista);
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL + "/" + id))
+                .header("Content-Type", "application/json")
+                .PUT(HttpRequest.BodyPublishers.ofString(json))
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        return gson.fromJson(response.body(), Motorista.class);
     }
 
-    // Atualizar motorista existente
-    public Optional<Motorista> atualizar(Long id, Motorista motoristaAtualizado) {
-        return motoristaRepository.findById(id).map(motorista -> {
-            motorista.setNome(motoristaAtualizado.getNome());
-            motorista.setTel(motoristaAtualizado.getTel());
-            motorista.setCartaConducao(motoristaAtualizado.getCartaConducao());
-            motorista.setDtNascimento(motoristaAtualizado.getDtNascimento());
-            motorista.setAvaliacao(motoristaAtualizado.getAvaliacao());
-            return motoristaRepository.save(motorista);
-        });
-    }
-
-    // Deletar um motorista
-    public boolean deletar(Long id) {
-        return motoristaRepository.findById(id).map(motorista -> {
-            motoristaRepository.delete(motorista);
-            return true;
-        }).orElse(false);
+    public void apagarMotorista(Long id) throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL + "/" + id))
+                .DELETE()
+                .build();
+        client.send(request, HttpResponse.BodyHandlers.ofString());
     }
 }

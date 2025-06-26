@@ -1,49 +1,73 @@
 package com.example.projeto2.base.service;
 
 import com.example.projeto2.base.model.TipoPagamento;
-import com.example.projeto2.base.repository.TipoPagamentoRepository;
-import org.springframework.stereotype.Service;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.List;
-import java.util.Optional;
 
-@Service
 public class TipoPagamentoService {
 
-    private final TipoPagamentoRepository tipoPagamentoRepository;
+    private final String BASE_URL = "http://localhost:8080/tipos-pagamento";
+    private final HttpClient client = HttpClient.newHttpClient();
+    private final Gson gson = new Gson();
 
-    public TipoPagamentoService(TipoPagamentoRepository tipoPagamentoRepository) {
-        this.tipoPagamentoRepository = tipoPagamentoRepository;
+    public List<TipoPagamento> getAllTiposPagamento() throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL))
+                .GET()
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        Type listType = new TypeToken<List<TipoPagamento>>() {}.getType();
+        return gson.fromJson(response.body(), listType);
     }
 
-    // Listar todos os tipos de pagamento
-    public List<TipoPagamento> listarTodos() {
-        return tipoPagamentoRepository.findAll();
+    public TipoPagamento getTipoPagamentoById(Long id) throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL + "/" + id))
+                .GET()
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        return gson.fromJson(response.body(), TipoPagamento.class);
     }
 
-    // Procurar tipo de pagamento por ID
-    public Optional<TipoPagamento> procurarPorId(Long id) {
-        return tipoPagamentoRepository.findById(id);
+    public TipoPagamento criarTipoPagamento(TipoPagamento tipoPagamento) throws IOException, InterruptedException {
+        String json = gson.toJson(tipoPagamento);
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL))
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(json))
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        return gson.fromJson(response.body(), TipoPagamento.class);
     }
 
-    // Criar ou salvar um novo tipo de pagamento
-    public TipoPagamento guardar(TipoPagamento tipoPagamento) {
-        return tipoPagamentoRepository.save(tipoPagamento);
+    public TipoPagamento atualizarTipoPagamento(Long id, TipoPagamento tipoPagamento) throws IOException, InterruptedException {
+        String json = gson.toJson(tipoPagamento);
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL + "/" + id))
+                .header("Content-Type", "application/json")
+                .PUT(HttpRequest.BodyPublishers.ofString(json))
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        return gson.fromJson(response.body(), TipoPagamento.class);
     }
 
-    // Atualizar um tipo de pagamento existente
-    public Optional<TipoPagamento> atualizar(Long id, TipoPagamento tipoPagamentoAtualizado) {
-        return tipoPagamentoRepository.findById(id).map(tipoPagamento -> {
-            tipoPagamento.setNome(tipoPagamentoAtualizado.getNome());
-            return tipoPagamentoRepository.save(tipoPagamento);
-        });
-    }
-
-    // Deletar um tipo de pagamento
-    public boolean deletar(Long id) {
-        return tipoPagamentoRepository.findById(id).map(tipoPagamento -> {
-            tipoPagamentoRepository.delete(tipoPagamento);
-            return true;
-        }).orElse(false);
+    public void apagarTipoPagamento(Long id) throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL + "/" + id))
+                .DELETE()
+                .build();
+        client.send(request, HttpResponse.BodyHandlers.ofString());
     }
 }

@@ -1,53 +1,73 @@
 package com.example.projeto2.base.service;
 
 import com.example.projeto2.base.model.Pagamento;
-import com.example.projeto2.base.repository.PagamentoRepository;
-import org.springframework.stereotype.Service;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.List;
-import java.util.Optional;
 
-@Service
 public class PagamentoService {
 
-    private final PagamentoRepository pagamentoRepository;
+    private final String BASE_URL = "http://localhost:8080/pagamentos";
+    private final HttpClient client = HttpClient.newHttpClient();
+    private final Gson gson = new Gson();
 
-    public PagamentoService(PagamentoRepository pagamentoRepository) {
-        this.pagamentoRepository = pagamentoRepository;
+    public List<Pagamento> getAllPagamentos() throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL))
+                .GET()
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        Type listType = new TypeToken<List<Pagamento>>() {}.getType();
+        return gson.fromJson(response.body(), listType);
     }
 
-    // Listar todos os pagamentos
-    public List<Pagamento> listarTodos() {
-        return pagamentoRepository.findAll();
+    public Pagamento getPagamentoById(Long id) throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL + "/" + id))
+                .GET()
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        return gson.fromJson(response.body(), Pagamento.class);
     }
 
-    // Procurar pagamento por ID
-    public Optional<Pagamento> procurarPorId(Long id) {
-        return pagamentoRepository.findById(id);
+    public Pagamento criarPagamento(Pagamento pagamento) throws IOException, InterruptedException {
+        String json = gson.toJson(pagamento);
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL))
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(json))
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        return gson.fromJson(response.body(), Pagamento.class);
     }
 
-    // Criar ou salvar um novo pagamento
-    public Pagamento guardar(Pagamento pagamento) {
-        return pagamentoRepository.save(pagamento);
+    public Pagamento atualizarPagamento(Long id, Pagamento pagamento) throws IOException, InterruptedException {
+        String json = gson.toJson(pagamento);
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL + "/" + id))
+                .header("Content-Type", "application/json")
+                .PUT(HttpRequest.BodyPublishers.ofString(json))
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        return gson.fromJson(response.body(), Pagamento.class);
     }
 
-    // Atualizar pagamento existente
-    public Optional<Pagamento> atualizar(Long id, Pagamento pagamentoAtualizado) {
-        return pagamentoRepository.findById(id).map(pagamento -> {
-            pagamento.setValor(pagamentoAtualizado.getValor());
-            pagamento.setViagem(pagamentoAtualizado.getViagem());
-            pagamento.setTipoPagamento(pagamentoAtualizado.getTipoPagamento());
-            pagamento.setCliente(pagamentoAtualizado.getCliente());
-            return pagamentoRepository.save(pagamento);
-        });
-    }
-
-    // Deletar um pagamento
-    public boolean deletar(Long id) {
-        return pagamentoRepository.findById(id).map(pagamento -> {
-            pagamentoRepository.delete(pagamento);
-            return true;
-        }).orElse(false);
+    public void apagarPagamento(Long id) throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL + "/" + id))
+                .DELETE()
+                .build();
+        client.send(request, HttpResponse.BodyHandlers.ofString());
     }
 }
-

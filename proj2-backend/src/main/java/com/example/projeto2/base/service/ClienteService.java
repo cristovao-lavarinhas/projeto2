@@ -1,49 +1,73 @@
 package com.example.projeto2.base.service;
 
 import com.example.projeto2.base.model.Cliente;
-import com.example.projeto2.base.repository.ClienteRepository;
-import org.springframework.stereotype.Service;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.List;
-import java.util.Optional;
 
-@Service
 public class ClienteService {
 
-    private final ClienteRepository clienteRepository;
+    private final String BASE_URL = "http://localhost:8080/clientes";
+    private final HttpClient client = HttpClient.newHttpClient();
+    private final Gson gson = new Gson();
 
-    public ClienteService(ClienteRepository clienteRepository) {
-        this.clienteRepository = clienteRepository;
+    public List<Cliente> getAllClientes() throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL))
+                .GET()
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        Type listType = new TypeToken<List<Cliente>>() {}.getType();
+        return gson.fromJson(response.body(), listType);
     }
 
-    public List<Cliente> listarTodos() {
-        return clienteRepository.findAll();
+    public Cliente getClienteById(Long id) throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL + "/" + id))
+                .GET()
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        return gson.fromJson(response.body(), Cliente.class);
     }
 
-    public Optional<Cliente> procurarPorId(Long id) {
-        return clienteRepository.findById(id);
+    public Cliente criarCliente(Cliente cliente) throws IOException, InterruptedException {
+        String json = gson.toJson(cliente);
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL))
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(json))
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        return gson.fromJson(response.body(), Cliente.class);
     }
 
-    public Cliente guardar(Cliente cliente) {
-        return clienteRepository.save(cliente);
+    public Cliente atualizarCliente(Long id, Cliente cliente) throws IOException, InterruptedException {
+        String json = gson.toJson(cliente);
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL + "/" + id))
+                .header("Content-Type", "application/json")
+                .PUT(HttpRequest.BodyPublishers.ofString(json))
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        return gson.fromJson(response.body(), Cliente.class);
     }
 
-    public Optional<Cliente> atualizar(Long id, Cliente clienteAtualizado) {
-        return clienteRepository.findById(id).map(cliente -> {
-            cliente.setNome(clienteAtualizado.getNome());
-            cliente.setNif(clienteAtualizado.getNif());
-            cliente.setTel(clienteAtualizado.getTel());
-            cliente.setRua(clienteAtualizado.getRua());
-            cliente.setNPorta(clienteAtualizado.getNPorta());
-            cliente.setCodigoPostal(clienteAtualizado.getCodigoPostal());
-            return clienteRepository.save(cliente);
-        });
-    }
-
-    public boolean deletar(Long id) {
-        return clienteRepository.findById(id).map(cliente -> {
-            clienteRepository.delete(cliente);
-            return true;
-        }).orElse(false);
+    public void apagarCliente(Long id) throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL + "/" + id))
+                .DELETE()
+                .build();
+        client.send(request, HttpResponse.BodyHandlers.ofString());
     }
 }

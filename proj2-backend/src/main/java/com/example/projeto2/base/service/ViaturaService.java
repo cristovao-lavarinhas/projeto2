@@ -1,53 +1,73 @@
 package com.example.projeto2.base.service;
 
 import com.example.projeto2.base.model.Viatura;
-import com.example.projeto2.base.repository.ViaturaRepository;
-import org.springframework.stereotype.Service;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.List;
-import java.util.Optional;
 
-@Service
 public class ViaturaService {
 
-    private final ViaturaRepository viaturaRepository;
+    private final String BASE_URL = "http://localhost:8080/viaturas";
+    private final HttpClient client = HttpClient.newHttpClient();
+    private final Gson gson = new Gson();
 
-    public ViaturaService(ViaturaRepository viaturaRepository) {
-        this.viaturaRepository = viaturaRepository;
+    public List<Viatura> getAllViaturas() throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL))
+                .GET()
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        Type listType = new TypeToken<List<Viatura>>() {}.getType();
+        return gson.fromJson(response.body(), listType);
     }
 
-    // Listar todas as viaturas
-    public List<Viatura> listarTodos() {
-        return viaturaRepository.findAll();
+    public Viatura getViaturaById(Long id) throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL + "/" + id))
+                .GET()
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        return gson.fromJson(response.body(), Viatura.class);
     }
 
-    // Procurar viatura por ID
-    public Optional<Viatura> procurarPorId(Long id) {
-        return viaturaRepository.findById(id);
+    public Viatura criarViatura(Viatura viatura) throws IOException, InterruptedException {
+        String json = gson.toJson(viatura);
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL))
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(json))
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        return gson.fromJson(response.body(), Viatura.class);
     }
 
-    // Criar ou salvar uma nova viatura
-    public Viatura guardar(Viatura viatura) {
-        return viaturaRepository.save(viatura);
+    public Viatura atualizarViatura(Long id, Viatura viatura) throws IOException, InterruptedException {
+        String json = gson.toJson(viatura);
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL + "/" + id))
+                .header("Content-Type", "application/json")
+                .PUT(HttpRequest.BodyPublishers.ofString(json))
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        return gson.fromJson(response.body(), Viatura.class);
     }
 
-    // Atualizar viatura existente
-    public Optional<Viatura> atualizar(Long id, Viatura viaturaAtualizada) {
-        return viaturaRepository.findById(id).map(viatura -> {
-            viatura.setMotorista(viaturaAtualizada.getMotorista());
-            viatura.setMatricula(viaturaAtualizada.getMatricula());
-            viatura.setModelo(viaturaAtualizada.getModelo());
-            viatura.setAno(viaturaAtualizada.getAno());
-            return viaturaRepository.save(viatura);
-        });
-    }
-
-    // Deletar uma viatura
-    public boolean deletar(Long id) {
-        return viaturaRepository.findById(id).map(viatura -> {
-            viaturaRepository.delete(viatura);
-            return true;
-        }).orElse(false);
+    public void apagarViatura(Long id) throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL + "/" + id))
+                .DELETE()
+                .build();
+        client.send(request, HttpResponse.BodyHandlers.ofString());
     }
 }
-

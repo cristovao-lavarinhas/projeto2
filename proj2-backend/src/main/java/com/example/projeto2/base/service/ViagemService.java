@@ -1,55 +1,73 @@
 package com.example.projeto2.base.service;
 
 import com.example.projeto2.base.model.Viagem;
-import com.example.projeto2.base.repository.ViagemRepository;
-import org.springframework.stereotype.Service;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.List;
-import java.util.Optional;
 
-@Service
 public class ViagemService {
 
-    private final ViagemRepository viagemRepository;
+    private final String BASE_URL = "http://localhost:8080/viagens";
+    private final HttpClient client = HttpClient.newHttpClient();
+    private final Gson gson = new Gson();
 
-    public ViagemService(ViagemRepository viagemRepository) {
-        this.viagemRepository = viagemRepository;
+    public List<Viagem> getAllViagens() throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL))
+                .GET()
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        Type listType = new TypeToken<List<Viagem>>() {}.getType();
+        return gson.fromJson(response.body(), listType);
     }
 
-    // Listar todas as viagens
-    public List<Viagem> listarTodos() {
-        return viagemRepository.findAll();
+    public Viagem getViagemById(Long id) throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL + "/" + id))
+                .GET()
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        return gson.fromJson(response.body(), Viagem.class);
     }
 
-    // Procurar viagem por ID
-    public Optional<Viagem> procurarPorId(Long id) {
-        return viagemRepository.findById(id);
+    public Viagem criarViagem(Viagem viagem) throws IOException, InterruptedException {
+        String json = gson.toJson(viagem);
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL))
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(json))
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        return gson.fromJson(response.body(), Viagem.class);
     }
 
-    // Criar ou salvar uma nova viagem
-    public Viagem guardar(Viagem viagem) {
-        return viagemRepository.save(viagem);
+    public Viagem atualizarViagem(Long id, Viagem viagem) throws IOException, InterruptedException {
+        String json = gson.toJson(viagem);
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL + "/" + id))
+                .header("Content-Type", "application/json")
+                .PUT(HttpRequest.BodyPublishers.ofString(json))
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        return gson.fromJson(response.body(), Viagem.class);
     }
 
-    // Atualizar viagem existente
-    public Optional<Viagem> atualizar(Long id, Viagem viagemAtualizada) {
-        return viagemRepository.findById(id).map(viagem -> {
-            viagem.setData(viagemAtualizada.getData());
-            viagem.setHoraInicio(viagemAtualizada.getHoraInicio());
-            viagem.setHoraFim(viagemAtualizada.getHoraFim());
-            viagem.setPreco(viagemAtualizada.getPreco());
-            viagem.setMotorista(viagemAtualizada.getMotorista());
-            viagem.setCliente(viagemAtualizada.getCliente());
-            return viagemRepository.save(viagem);
-        });
-    }
-
-    // Deletar uma viagem
-    public boolean deletar(Long id) {
-        return viagemRepository.findById(id).map(viagem -> {
-            viagemRepository.delete(viagem);
-            return true;
-        }).orElse(false);
+    public void apagarViagem(Long id) throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL + "/" + id))
+                .DELETE()
+                .build();
+        client.send(request, HttpResponse.BodyHandlers.ofString());
     }
 }
-
