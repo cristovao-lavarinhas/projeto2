@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="com.example.projetojavafx.Controller.MainViewController">
+   <children>
+      <Label alignment="TOP_LEFT" layoutX="100.0" layoutY="120.0" text="Olá do Scene Builder!" />
+   </children>
+</AnchorPane>

@@ -6,19 +6,19 @@
 
 <AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.projetojavafx.Controller.GerirDocumentosController" stylesheets="@style.css">
 
-    <VBox spacing="20" alignment="TOP_CENTER" AnchorPane.topAnchor="20" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20" style="-fx-padding: 20; -fx-background-color: #f5f6fa;">
+    <VBox spacing="20" alignment="TOP_LEFT" AnchorPane.topAnchor="20" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20" style="-fx-padding: 20; -fx-background-color: #f5f6fa;">
 
-        <Label text="Gestão de Documentos" styleClass="page-title"/>
+        <HBox spacing="20" alignment="CENTER_LEFT">
+            <Label text="Gestão de Documentos" styleClass="page-title"/>
+            <Button text="➕ Carregar Documento" onAction="#carregarDocumento" styleClass="add-button"/>
+        </HBox>
 
         <TableView fx:id="documentosTable" prefHeight="500" styleClass="modern-table" editable="false">
             <columns>
-
                 <TableColumn fx:id="nomeColumn" text="Nome Motorista"/>
                 <TableColumn fx:id="tipoDocColumn" text="Tipo Documento"/>
                 <TableColumn fx:id="expiracaoColumn" text="Data de Expiração"/>
-                <TableColumn fx:id="estadoColumn" text="Estado"/>
-                <TableColumn fx:id="acoesColumn" text="Ações" />
-
+                <TableColumn fx:id="acoesColumn" text="Ações"/>
             </columns>
         </TableView>
 

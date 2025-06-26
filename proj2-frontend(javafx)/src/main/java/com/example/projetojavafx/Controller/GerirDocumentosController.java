@@ -25,9 +25,6 @@ public class GerirDocumentosController {
     private TableColumn<Documento, String> expiracaoColumn;
 
     @FXML
-    private TableColumn<Documento, String> estadoColumn;
-
-    @FXML
     private TableColumn<Documento, Void> acoesColumn;
 
     private ObservableList<Documento> documentosList;
@@ -37,11 +34,10 @@ public class GerirDocumentosController {
         nomeColumn.setCellValueFactory(new PropertyValueFactory<>("nomeMotorista"));
         tipoDocColumn.setCellValueFactory(new PropertyValueFactory<>("tipoDocumento"));
         expiracaoColumn.setCellValueFactory(new PropertyValueFactory<>("dataExpiracao"));
-        estadoColumn.setCellValueFactory(new PropertyValueFactory<>("estado"));
 
         documentosList = FXCollections.observableArrayList(
-                new Documento("João Silva", "Carta de Condução", "2025-08-15", "Pendente"),
-                new Documento("Ana Costa", "Registo Criminal", "2026-03-10", "Pendente")
+                new Documento("João Silva", "Carta de Condução", "2025-08-15"),
+                new Documento("Ana Costa", "Registo Criminal", "2026-03-10")
         );
 
         documentosTable.setItems(documentosList);
@@ -61,14 +57,14 @@ public class GerirDocumentosController {
 
                 aprovarBtn.setOnAction(event -> {
                     Documento documento = getTableView().getItems().get(getIndex());
-                    documento.setEstado("Aprovado");
-                    documentosTable.refresh();
+                    mostrarAlerta("Documento Aprovado", documento.getNomeMotorista());
+                    documentosList.remove(documento);
                 });
 
                 rejeitarBtn.setOnAction(event -> {
                     Documento documento = getTableView().getItems().get(getIndex());
-                    documento.setEstado("Rejeitado");
-                    documentosTable.refresh();
+                    mostrarAlerta("Documento Rejeitado", documento.getNomeMotorista());
+                    documentosList.remove(documento);
                 });
 
                 buttons.setSpacing(10);
@@ -85,5 +81,19 @@ public class GerirDocumentosController {
             }
         };
         acoesColumn.setCellFactory(cellFactory);
+    }
+
+    private void mostrarAlerta(String titulo, String nomeMotorista) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText("Documento de " + nomeMotorista + " foi atualizado.");
+        alert.showAndWait();
+    }
+
+    @FXML
+    private void carregarDocumento() {
+        Documento novoDoc = new Documento("Novo Motorista", "Novo Documento", "2027-01-01");
+        documentosList.add(novoDoc);
     }
 }
