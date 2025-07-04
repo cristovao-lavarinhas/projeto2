@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.image.ImageView?>
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="com.example.projetojavafx.Controller.Driver.ContatarSuporteController">
+    <left>
+        <VBox spacing="10" style="-fx-background-color: #f7f9fb; -fx-padding: 18 8 18 8; -fx-min-width: 260;">
+            <Label text="Mensagens dos Clientes" style="-fx-font-size: 15px; -fx-font-weight: bold;" />
+            <ListView fx:id="conversaListView" VBox.vgrow="ALWAYS" />
+        </VBox>
+    </left>
+    <center>
+        <VBox spacing="0" style="-fx-background-color: #fff; -fx-padding: 0 0 0 0;">
+            <HBox style="-fx-padding: 18 24 12 24; -fx-background-color: #f7f9fb;" spacing="10">
+                <ImageView fx:id="imgAvatar" fitHeight="36" fitWidth="36" />
+                <Label fx:id="lblNomeCliente" text="Nome do Cliente" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+                <Region HBox.hgrow="ALWAYS" />
+                <Label fx:id="lblData" text="01/07/2024 14:22" style="-fx-font-size: 12px; -fx-text-fill: #888;" />
+            </HBox>
+            <Separator />
+            <ScrollPane fx:id="chatScrollPane" fitToWidth="true" VBox.vgrow="ALWAYS" style="-fx-background-color:transparent;">
+                <VBox fx:id="chatBox" spacing="10" style="-fx-padding: 18 24 18 24;" />
+            </ScrollPane>
+            <HBox spacing="10" style="-fx-padding: 16 24 16 24; -fx-background-color: #f7f9fb;">
+                <TextField fx:id="txtMensagem" promptText="Escreva a sua mensagem..." HBox.hgrow="ALWAYS" />
+                <Button fx:id="btnEnviar" text="Enviar" styleClass="add-button" />
+            </HBox>
+        </VBox>
+    </center>
+</BorderPane> 

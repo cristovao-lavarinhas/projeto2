@@ -382,3 +382,124 @@
 .delete-button:hover {
     -fx-background-color: #c0392b;
 }
+
+/* Notificações */
+.notification-button {
+    -fx-background-color: transparent;
+    -fx-cursor: hand;
+    -fx-padding: 6 10;
+    -fx-background-radius: 50%;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.08), 2, 0, 0, 1);
+}
+.notification-button:hover {
+    -fx-background-color: #f0f4fa;
+}
+.notification-badge {
+    -fx-background-color: #e74c3c;
+    -fx-text-fill: white;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-padding: 1 6;
+    -fx-background-radius: 10;
+    -fx-translate-x: 12;
+    -fx-translate-y: -10;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.15), 2, 0, 0, 1);
+}
+
+/* Notificações - popup premium */
+.notification-popup {
+    -fx-background-color: #fff;
+    -fx-background-radius: 18;
+    -fx-effect: dropshadow(three-pass-box, rgba(44,62,80,0.22), 32, 0, 0, 8);
+    -fx-padding: 28 0 24 0;
+    -fx-min-width: 370px;
+    -fx-max-width: 400px;
+    -fx-border-color: #e0e6f0;
+    -fx-border-width: 2;
+    -fx-spacing: 0;
+    -fx-opacity: 1;
+}
+.notification-popup-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-padding: 0 0 16 32;
+    -fx-text-fill: #233a80;
+    -fx-graphic-text-gap: 10;
+    -fx-letter-spacing: 0.5px;
+}
+.notification-popup-separator {
+    -fx-background-color: #e0e6f0;
+    -fx-min-height: 2.5;
+    -fx-max-height: 2.5;
+    -fx-pref-height: 2.5;
+    -fx-padding: 0 0 0 0;
+}
+.notification-item {
+    -fx-padding: 18 28 18 28;
+    -fx-background-color: #f8fafd;
+    -fx-background-radius: 12;
+    -fx-border-width: 0 0 0 0;
+    -fx-border-color: transparent;
+    -fx-effect: dropshadow(three-pass-box, rgba(44,62,80,0.06), 4, 0, 0, 1);
+    -fx-cursor: pointer;
+    -fx-transition: background-color 0.2s;
+    -fx-spacing: 2;
+    -fx-margin: 0 0 14 0;
+}
+.notification-item + .notification-item {
+    -fx-margin: 14 0 0 0;
+}
+.notification-item:hover {
+    -fx-background-color: #eaf1fb;
+}
+.notification-item-unread {
+    -fx-background-color: #eaf6ff;
+    -fx-border-color: #3498db;
+    -fx-border-width: 0 0 0 4;
+}
+.notification-item-title {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #34495e;
+}
+.notification-item-message {
+    -fx-font-size: 13.5px;
+    -fx-text-fill: #7f8c8d;
+    -fx-padding: 3 0 0 0;
+}
+.notification-item-date {
+    -fx-font-size: 11.5px;
+    -fx-text-fill: #b2bec3;
+    -fx-padding: 3 0 0 0;
+}
+.notification-popup-footer {
+    -fx-padding: 16 32 0 32;
+    -fx-alignment: CENTER_RIGHT;
+}
+.notification-mark-read {
+    -fx-background-color: #3498db;
+    -fx-text-fill: white;
+    -fx-font-size: 12.5px;
+    -fx-background-radius: 10;
+    -fx-padding: 7 22;
+    -fx-cursor: hand;
+    -fx-border-color: #217dbb;
+    -fx-border-width: 1;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(three-pass-box, rgba(44,62,80,0.08), 2, 0, 0, 1);
+}
+.notification-mark-read:hover {
+    -fx-background-color: #217dbb;
+    -fx-text-fill: #fff;
+}
+.notification-popup-arrow {
+    -fx-shape: "M 0 0 L 16 0 L 8 12 Z";
+    -fx-background-color: #fff;
+    -fx-effect: dropshadow(three-pass-box, rgba(44,62,80,0.10), 2, 0, 0, 1);
+    -fx-min-width: 16;
+    -fx-min-height: 12;
+    -fx-max-width: 16;
+    -fx-max-height: 12;
+    -fx-translate-x: 48;
+    -fx-translate-y: -12;
+}

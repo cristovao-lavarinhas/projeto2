@@ -27,5 +27,6 @@
         </GridPane>
         <Button text="Exportar PDF" fx:id="exportarPdfButton" style="-fx-background-color: #f2c200; -fx-text-fill: #222; -fx-background-radius: 8;" />
         <Button text="Fechar" fx:id="fecharButton" style="-fx-background-color: #e0e0e0; -fx-background-radius: 8;" />
+        <Button text="Abrir no Google Maps" fx:id="abrirMapsButton" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-background-radius: 8;" />
     </VBox>
 </AnchorPane> 

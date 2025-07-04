@@ -23,7 +23,12 @@
                 <VBox styleClass="menu-section">
                     <Button text="Histórico de Viagens" onAction="#historicoViagens" styleClass="menu-button"/>
                     <Button text="Viagens Ativas" onAction="#viagensAtivas" styleClass="menu-button"/>
+                </VBox>
+
+                <Label text="Motorista" styleClass="menu-section-header"/>
+                <VBox styleClass="menu-section">
                     <Button text="Meu Perfil" onAction="#perfilMotorista" styleClass="menu-button"/>
+                    <Button text="Minha Viatura" onAction="#minhaViatura" styleClass="menu-button"/>
                 </VBox>
 
                 <Separator/>
@@ -32,7 +37,6 @@
                 <Label text="Pagamentos" styleClass="menu-section-header"/>
                 <VBox styleClass="menu-section">
                     <Button text="Ver Pagamentos" onAction="#verPagamentos" styleClass="menu-button"/>
-                    <Button text="Extrato de Pagamento" onAction="#extratoPagamento" styleClass="menu-button"/>
                 </VBox>
 
                 <Separator/>
@@ -40,7 +44,7 @@
                 <!-- Suporte -->
                 <Label text="Suporte" styleClass="menu-section-header"/>
                 <VBox styleClass="menu-section">
-                    <Button text="Contatar Suporte" onAction="#contatarSuporte" styleClass="menu-button"/>
+                    <Button text="Mensagens" onAction="#contatarSuporte" styleClass="menu-button"/>
                 </VBox>
             </VBox>
         </ScrollPane>
@@ -54,6 +58,13 @@
 
             <TextField fx:id="searchField" promptText="Buscar..." styleClass="search-bar"/>
             <Label fx:id="greetingLabel" styleClass="user-greeting" text="Bem-vindo, Motorista"/>
+
+            <!-- Botão de Notificações -->
+            <StackPane fx:id="notificationButtonPane">
+                <Button fx:id="notificationButton" styleClass="notification-button" onAction="#showNotifications" focusTraversable="false" text="🔔"/>
+                <Label fx:id="notificationBadge" text="0" styleClass="notification-badge" visible="false"/>
+            </StackPane>
+
             <Button text="Logout" onAction="#handleLogout" styleClass="logout-button"/>
         </HBox>
     </top>

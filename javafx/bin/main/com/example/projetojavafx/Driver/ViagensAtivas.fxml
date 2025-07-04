@@ -28,6 +28,7 @@
                     <TableColumn fx:id="statusColumn" text="Status" minWidth="100" />
                     <TableColumn fx:id="aceitarColumn" text="Aceitar" minWidth="90" />
                     <TableColumn fx:id="recusarColumn" text="Recusar" minWidth="90" />
+                    <TableColumn fx:id="mapaColumn" text="Mapa" minWidth="80" />
                 </columns>
             </TableView>
         </StackPane>

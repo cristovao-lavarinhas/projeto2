@@ -1,14 +1,18 @@
 package com.example.projetojavafx.Controller.Driver;
 
-import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.stage.Stage;
+import java.awt.Desktop;
+import java.io.File;
+import java.net.URI;
+
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Paragraph;
-import java.io.File;
+
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.stage.Stage;
 
 public class DetalhesViagemController {
     @FXML private Label dataLabel;
@@ -21,6 +25,7 @@ public class DetalhesViagemController {
     @FXML private Label avaliacaoLabel;
     @FXML private Button exportarPdfButton;
     @FXML private Button fecharButton;
+    @FXML private Button abrirMapsButton;
 
     private ViagemDetalhe viagem;
 
@@ -28,6 +33,9 @@ public class DetalhesViagemController {
     public void initialize() {
         exportarPdfButton.setOnAction(e -> exportarPDF());
         fecharButton.setOnAction(e -> fechar());
+        if (abrirMapsButton != null) {
+            abrirMapsButton.setOnAction(e -> abrirNoGoogleMaps());
+        }
     }
 
     public void setViagem(ViagemDetalhe viagem) {
@@ -68,6 +76,16 @@ public class DetalhesViagemController {
     private void fechar() {
         Stage stage = (Stage) fecharButton.getScene().getWindow();
         stage.close();
+    }
+
+    private void abrirNoGoogleMaps() {
+        try {
+            String destino = destinoLabel.getText();
+            String url = "https://www.google.com/maps/dir/?api=1&destination=" + java.net.URLEncoder.encode(destino, "UTF-8");
+            Desktop.getDesktop().browse(new URI(url));
+        } catch (Exception e) {
+            // feedback de erro
+        }
     }
 
     // Classe mock para exemplo

@@ -1,5 +1,8 @@
 package com.example.projetojavafx.Controller.Driver;
 
+import java.awt.Desktop;
+import java.net.URI;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -37,6 +40,8 @@ public class ViagensAtivasController {
     @FXML
     private TableColumn<ViagemAtiva, Void> recusarColumn;
     @FXML
+    private TableColumn<ViagemAtiva, Void> mapaColumn;
+    @FXML
     private TextField searchField;
     @FXML
     private Button searchButton;
@@ -59,9 +64,9 @@ public class ViagensAtivasController {
 
         // Exemplo de dados
         viagens.addAll(
-            new ViagemAtiva("2024-06-05", "João Silva", 123, "Lisboa", "Porto", "Pendente"),
-            new ViagemAtiva("2024-06-06", "Maria Costa", 456, "Porto", "Coimbra", "Aceite"),
-            new ViagemAtiva("2024-06-07", "Carlos Dias", 789, "Faro", "Lisboa", "Recusada")
+            new ViagemAtiva("2024-06-05", "João Silva", 123, "Lisboa", "Porto", 38.7223, -9.1393, 41.1579, -8.6291, "Pendente"),
+            new ViagemAtiva("2024-06-06", "Maria Costa", 456, "Porto", "Coimbra", 41.1579, -8.6291, 40.2033, -8.4103, "Aceite"),
+            new ViagemAtiva("2024-06-07", "Carlos Dias", 789, "Faro", "Lisboa", 37.0194, -7.9304, 38.7223, -9.1393, "Recusada")
         );
         viagensTable.setItems(viagens);
         atualizarInfoLabel();
@@ -207,6 +212,30 @@ public class ViagensAtivasController {
             return row;
         });
 
+        // Coluna Mapa
+        if (mapaColumn != null) {
+            mapaColumn.setCellFactory(col -> new TableCell<ViagemAtiva, Void>() {
+                private final Button btn = new Button("Mapa");
+                {
+                    btn.setStyle("-fx-background-color: #3498db; -fx-text-fill: white; -fx-background-radius: 8;");
+                    btn.setTooltip(new Tooltip("Abrir destino no Google Maps"));
+                    btn.setOnAction(e -> {
+                        ViagemAtiva viagem = getTableView().getItems().get(getIndex());
+                        abrirNoGoogleMaps(viagem.getOrigemLat(), viagem.getOrigemLng(), viagem.getDestinoLat(), viagem.getDestinoLng());
+                    });
+                }
+                @Override
+                protected void updateItem(Void item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty) {
+                        setGraphic(null);
+                    } else {
+                        setGraphic(btn);
+                    }
+                }
+            });
+        }
+
         if (estadoFilterCombo != null) {
             estadoFilterCombo.setItems(FXCollections.observableArrayList("Todas", "Aceite", "Recusada", "Pendente"));
             estadoFilterCombo.getSelectionModel().selectFirst();
@@ -270,6 +299,16 @@ public class ViagensAtivasController {
         alert.showAndWait();
     }
 
+    private void abrirNoGoogleMaps(double origemLat, double origemLng, double destinoLat, double destinoLng) {
+        try {
+            String url = "https://www.google.com/maps/dir/?api=1&origin=" + origemLat + "," + origemLng + "&destination=" + destinoLat + "," + destinoLng;
+            Desktop.getDesktop().browse(new URI(url));
+        } catch (Exception e) {
+            Alert alert = new Alert(AlertType.ERROR, "Não foi possível abrir o Google Maps.");
+            alert.showAndWait();
+        }
+    }
+
     // Modelo interno para exemplo
     public static class ViagemAtiva {
         private final String data;
@@ -277,20 +316,32 @@ public class ViagensAtivasController {
         private final int clienteId;
         private final String origem;
         private final String destino;
+        private final double origemLat;
+        private final double origemLng;
+        private final double destinoLat;
+        private final double destinoLng;
         private String status;
 
-        public ViagemAtiva(String data, String clienteNome, int clienteId, String origem, String destino, String status) {
+        public ViagemAtiva(String data, String clienteNome, int clienteId, String origem, String destino, double origemLat, double origemLng, double destinoLat, double destinoLng, String status) {
             this.data = data;
             this.clienteNome = clienteNome;
             this.clienteId = clienteId;
             this.origem = origem;
             this.destino = destino;
+            this.origemLat = origemLat;
+            this.origemLng = origemLng;
+            this.destinoLat = destinoLat;
+            this.destinoLng = destinoLng;
             this.status = status;
         }
         public String getData() { return data; }
         public String getCliente() { return clienteNome + " (ID: " + clienteId + ")"; }
         public String getOrigem() { return origem; }
         public String getDestino() { return destino; }
+        public double getOrigemLat() { return origemLat; }
+        public double getOrigemLng() { return origemLng; }
+        public double getDestinoLat() { return destinoLat; }
+        public double getDestinoLng() { return destinoLng; }
         public String getStatus() { return status; }
         public void setStatus(String status) { this.status = status; }
     }

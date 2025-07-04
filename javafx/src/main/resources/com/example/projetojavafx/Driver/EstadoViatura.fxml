@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.image.ImageView?>
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="com.example.projetojavafx.Controller.Driver.EstadoViaturaController">
+    <top>
+        <HBox spacing="18" style="-fx-padding: 24 24 12 24; -fx-background-color: #f7f9fb;">
+            <Label text="🚗" style="-fx-font-size: 48px; -fx-padding: 0 8 0 0;" />
+            <VBox spacing="6">
+                <Label fx:id="lblMarcaModelo" text="Marca Modelo" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+                <Label fx:id="lblMatricula" text="Matrícula: 00-AA-00" style="-fx-font-size: 13px;" />
+                <Label fx:id="lblAnoCor" text="Ano: 2020   Cor: Preto" style="-fx-font-size: 13px;" />
+                <Label fx:id="lblEstado" text="Disponível" style="-fx-font-size: 13px; -fx-text-fill: #27ae60;" />
+            </VBox>
+        </HBox>
+    </top>
+    <center>
+        <VBox spacing="18" style="-fx-padding: 18 24 18 24;">
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <Label text="Documentos Obrigatórios" style="-fx-font-size: 15px; -fx-font-weight: bold;" />
+                <Region HBox.hgrow="ALWAYS" />
+                <Button fx:id="btnVerHistorico" text="Histórico de Submissões" />
+            </HBox>
+            <TableView fx:id="tblDocumentos" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="colNome" text="Documento" prefWidth="160" />
+                    <TableColumn fx:id="colValidade" text="Validade" prefWidth="110" />
+                    <TableColumn fx:id="colEstado" text="Estado" prefWidth="100" />
+                    <TableColumn fx:id="colAcao" text="Ação" prefWidth="120" />
+                </columns>
+            </TableView>
+        </VBox>
+    </center>
+</BorderPane> 
