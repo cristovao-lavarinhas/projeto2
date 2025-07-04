@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.projetojavafx.Controller.Admin.AdminDashboardController"
+            stylesheets="@../style.css">
+
+    <!-- Sidebar -->
+    <left>
+        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" styleClass="sidebar-scroll">
+            <VBox fx:id="sidebar" styleClass="sidebar" spacing="10" maxWidth="250" minWidth="80" prefWidth="200">
+                <!-- Gestão de Motoristas -->
+                <Label text="Gestão de Motoristas" styleClass="menu-section-header"/>
+                <VBox styleClass="menu-section">
+                    <Button text="Listar Motoristas" onAction="#listarMotorista" styleClass="menu-button"/>
+                    <Button text="Pedidos de Inscrição" onAction="#pedidosInscricao" styleClass="menu-button"/>
+                    <Button text="Estado do Motorista" onAction="#estadoMotorista" styleClass="menu-button"/>
+                    <Button text="Atualizar documentos" onAction="#atualizarDocs" styleClass="menu-button"/>
+                    <Button text="Verificar estado" onAction="#estado" styleClass="menu-button"/>
+                </VBox>
+
+                <Separator/>
+
+                <!-- Gestão de Viaturas -->
+                <Label text="Gestão de Viaturas" styleClass="menu-section-header"/>
+                <VBox styleClass="menu-section">
+                    <Button text="Registar viatura" onAction="#registarViatura" styleClass="menu-button"/>
+                    <Button text="Listar viatura" onAction="#listarViatura" styleClass="menu-button"/>
+                    <Button text="Associar viatura a motorista" onAction="#associarViatura" styleClass="menu-button"/>
+                    <Button text="Gerir documentos" onAction="#gerirDocumentos" styleClass="menu-button"/>
+                    <Button text="Estado viatura" onAction="#estadoViatura" styleClass="menu-button"/>
+                </VBox>
+
+                <Separator/>
+
+                <!-- Gestão de Viagens -->
+                <Label text="Gestão de Viagens" styleClass="menu-section-header"/>
+                <VBox styleClass="menu-section">
+                    <Button text="Histórico de viagem" onAction="#historicoViagens" styleClass="menu-button"/>
+                </VBox>
+
+                <Separator/>
+
+                <!-- Pagamentos -->
+                <Label text="Pagamentos" styleClass="menu-section-header"/>
+                <VBox styleClass="menu-section">
+                    <Button text="Gerir faturação" onAction="#faturacao" styleClass="menu-button"/>
+                    <Button text="Controlar saldo pendente" onAction="#controlarSaldo" styleClass="menu-button"/>
+                    <Button text="Exportar relatórios de pagamento" onAction="#exportarRelatorios" styleClass="menu-button"/>
+                </VBox>
+
+                <Separator/>
+
+                <!-- Suporte e notificações -->
+                <Label text="Notificações" styleClass="menu-section-header"/>
+                <VBox styleClass="menu-section">
+                    <Button text="Suporte" onAction="#suporte" styleClass="menu-button"/>
+                </VBox>
+                <Separator/>
+            </VBox>
+        </ScrollPane>
+    </left>
+
+    <!-- Topbar -->
+    <top>
+        <HBox spacing="20" alignment="CENTER_LEFT"
+              style="-fx-padding: 10; -fx-background-color: white;"
+              AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
+            <Pane HBox.hgrow="ALWAYS"/>
+            <TextField fx:id="searchField" promptText="Search..." styleClass="search-bar"/>
+            <Label fx:id="greetingLabel" styleClass="user-greeting"/>
+            <Button text="Logout" onAction="#handleLogout" styleClass="logout-button"/>
+
+        </HBox>
+    </top>
+
+
+    <!-- Área Principal -->
+    <center>
+        <StackPane fx:id="contentArea" styleClass="content-area"/>
+    </center>
+
+</BorderPane>

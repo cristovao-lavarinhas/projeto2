@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.projetojavafx.Controller.Admin.ControlarSaldoController">
+
+    <!-- Título -->
+    <Label text="Controlar Saldos Pendentes"
+           layoutX="20" layoutY="20"
+           style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+
+    <!-- Filtro por Motorista -->
+    <HBox spacing="10" layoutX="20" layoutY="60">
+        <Label text="Filtrar por motorista:"/>
+        <ComboBox fx:id="motoristaCombo" promptText="Seleciona um motorista"/>
+    </HBox>
+
+    <!-- Tabela de Saldo (aumentada e personalizada) -->
+    <TableView fx:id="saldoTable" layoutX="20" layoutY="100" prefHeight="400" prefWidth="700">
+        <columns>
+            <TableColumn fx:id="motoristaColumn" text="Motorista" prefWidth="200"/>
+            <TableColumn fx:id="saldoColumn" text="Saldo Atual" prefWidth="150"/>
+            <TableColumn fx:id="statusColumn" text="Status" prefWidth="150"/>
+            <TableColumn fx:id="acoesColumn" text="Ações" prefWidth="200"/>
+        </columns>
+    </TableView>
+
+    <!-- Total -->
+    <HBox spacing="10" layoutX="20" layoutY="520">
+        <Label text="Total Pendente:"/>
+        <Label fx:id="totalPendenteLabel" text="0.00€"/>
+    </HBox>
+
+</AnchorPane>

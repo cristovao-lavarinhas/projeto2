@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Pos?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.projetojavafx.Controller.Admin.VerificarEstadoController" stylesheets="@../style.css">
+
+    <VBox spacing="20" alignment="TOP_LEFT" AnchorPane.topAnchor="20" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20" AnchorPane.bottomAnchor="20" style="-fx-background-color: #f5f6fa;">
+
+        <Label text="Verificar Estado dos Motoristas" styleClass="page-title"/>
+
+        <!-- Selecionar Motorista -->
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <Label text="Selecione o Motorista:"/>
+            <ComboBox fx:id="motoristaComboBox" prefWidth="300"/>
+            <Button text="Verificar" onAction="#handleVerificar" styleClass="check-button"/>
+            <Button text="Exportar Relatório" onAction="#handleExportarRelatorio" styleClass="export-button"/>
+        </HBox>
+
+        <!-- Resultado -->
+        <VBox spacing="10" alignment="TOP_LEFT" style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 20;">
+            <Label fx:id="estadoMotoristaLabel" text="Estado do Motorista:" styleClass="info-label"/>
+            <Label fx:id="documentosStatusLabel" text="Estado dos Documentos:" styleClass="info-label"/>
+            <Label fx:id="faltasLabel" text="Faltam:" styleClass="faltas-label"/>
+        </VBox>
+
+    </VBox>
+
+</AnchorPane>

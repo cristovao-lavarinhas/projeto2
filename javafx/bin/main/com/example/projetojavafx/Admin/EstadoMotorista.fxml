@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Pos?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.projetojavafx.Controller.Admin.EstadoMotoristaController" stylesheets="@../style.css">
+
+    <VBox spacing="20" alignment="TOP_LEFT" AnchorPane.topAnchor="20" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20" AnchorPane.bottomAnchor="20" style="-fx-background-color: #f5f6fa;">
+
+        <Label text="Estado dos Motoristas" styleClass="page-title"/>
+
+        <TableView fx:id="motoristasTable" styleClass="modern-table" prefWidth="1000" prefHeight="600">
+            <columns>
+                <TableColumn fx:id="nomeColumn" text="Nome" prefWidth="250"/>
+                <TableColumn fx:id="telefoneColumn" text="Telefone" prefWidth="200"/>
+                <TableColumn fx:id="licencaColumn" text="Licença" prefWidth="200"/>
+                <TableColumn fx:id="estadoColumn" text="Estado" prefWidth="200"/>
+            </columns>
+        </TableView>
+
+    </VBox>
+
+</AnchorPane>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Pos?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.projetojavafx.Controller.Admin.AtualizarDocumentosController" stylesheets="@../style.css">
+
+    <VBox spacing="20" alignment="TOP_LEFT" AnchorPane.topAnchor="20" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20" AnchorPane.bottomAnchor="20" style="-fx-background-color: #f5f6fa;">
+
+        <Label text="Atualizar Documentos dos Motoristas" styleClass="page-title"/>
+
+        <!-- Selecionar Motorista -->
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <Label text="Selecione o Motorista:"/>
+            <ComboBox fx:id="motoristaComboBox" prefWidth="300"/>
+        </HBox>
+
+        <!-- Documentos -->
+        <GridPane hgap="20" vgap="20" style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 20; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 10, 0, 0, 0);">
+
+            <Label text="Licença TVDE:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+            <Button text="Upload" onAction="#uploadLicenca" GridPane.rowIndex="0" GridPane.columnIndex="1" styleClass="upload-button"/>
+
+            <Label text="Seguro de Viagem:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+            <Button text="Upload" onAction="#uploadSeguro" GridPane.rowIndex="1" GridPane.columnIndex="1" styleClass="upload-button"/>
+
+            <Label text="Documento do Veículo:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+            <Button text="Upload" onAction="#uploadDocumentoVeiculo" GridPane.rowIndex="2" GridPane.columnIndex="1" styleClass="upload-button"/>
+
+        </GridPane>
+
+        <!-- Botão Guardar -->
+        <Button text="Guardar Alterações" onAction="#guardarAlteracoes" styleClass="save-button" alignment="CENTER"/>
+
+    </VBox>
+
+</AnchorPane>

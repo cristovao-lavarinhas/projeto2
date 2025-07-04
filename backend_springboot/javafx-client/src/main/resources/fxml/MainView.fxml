@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" 
+      fx:controller="com.example.javafxclient.controller.MainController"
+      spacing="10" padding="10">
+
+    <Label text="Transportation Management System" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+    
+    <TabPane fx:id="tabPane" VBox.vgrow="ALWAYS">
+        
+        <!-- Clientes Tab -->
+        <Tab fx:id="clientesTab" text="Clientes" closable="false">
+            <VBox spacing="10" padding="10">
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="Nome:"/>
+                    <TextField fx:id="clienteNomeField" promptText="Nome do cliente"/>
+                    <Label text="NIF:"/>
+                    <TextField fx:id="clienteNifField" promptText="NIF"/>
+                    <Label text="Telefone:"/>
+                    <TextField fx:id="clienteTelField" promptText="Telefone"/>
+                </HBox>
+                
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="Rua:"/>
+                    <TextField fx:id="clienteRuaField" promptText="Rua"/>
+                    <Label text="Nº Porta:"/>
+                    <TextField fx:id="clientePortaField" promptText="Número da porta"/>
+                </HBox>
+                
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Button fx:id="addClienteBtn" text="Adicionar Cliente" style="-fx-background-color: #4CAF50; -fx-text-fill: white;"/>
+                    <Button fx:id="updateClienteBtn" text="Atualizar Cliente" style="-fx-background-color: #2196F3; -fx-text-fill: white;"/>
+                    <Button fx:id="deleteClienteBtn" text="Eliminar Cliente" style="-fx-background-color: #f44336; -fx-text-fill: white;"/>
+                </HBox>
+                
+                <TableView fx:id="clientesTable" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="clienteNomeCol" text="Nome" prefWidth="200"/>
+                        <TableColumn fx:id="clienteNifCol" text="NIF" prefWidth="150"/>
+                        <TableColumn fx:id="clienteTelCol" text="Telefone" prefWidth="150"/>
+                    </columns>
+                </TableView>
+            </VBox>
+        </Tab>
+        
+        <!-- Motoristas Tab -->
+        <Tab fx:id="motoristasTab" text="Motoristas" closable="false">
+            <VBox spacing="10" padding="10">
+                <TableView fx:id="motoristasTable" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="motoristaNomeCol" text="Nome" prefWidth="200"/>
+                        <TableColumn fx:id="motoristaTelCol" text="Telefone" prefWidth="150"/>
+                        <TableColumn fx:id="motoristaCartaCol" text="Carta de Condução" prefWidth="200"/>
+                    </columns>
+                </TableView>
+            </VBox>
+        </Tab>
+        
+        <!-- Viagens Tab -->
+        <Tab fx:id="viagensTab" text="Viagens" closable="false">
+            <VBox spacing="10" padding="10">
+                <TableView fx:id="viagensTable" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="viagemIdCol" text="ID" prefWidth="100"/>
+                        <TableColumn fx:id="viagemMotoristaCol" text="Motorista" prefWidth="200"/>
+                        <TableColumn fx:id="viagemClienteCol" text="Cliente" prefWidth="200"/>
+                        <TableColumn fx:id="viagemPrecoCol" text="Preço (€)" prefWidth="150"/>
+                    </columns>
+                </TableView>
+            </VBox>
+        </Tab>
+        
+    </TabPane>
+    
+</VBox> 

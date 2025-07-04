@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.projetojavafx.Controller.Admin.ListarMotoristasController" stylesheets="@../style.css">
+
+<VBox spacing="20" style="-fx-padding: 20;" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+
+    <HBox alignment="CENTER_LEFT" spacing="10">
+        <Label text="Lista de Motoristas" styleClass="title-label"/>
+        <Button text="Adicionar Motorista" onAction="#adicionarMotorista" styleClass="add-button"/>
+    </HBox>
+
+    <TableView fx:id="driversTable" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="nameColumn" text="Nome" prefWidth="150"/>
+            <TableColumn fx:id="phoneColumn" text="Telefone" prefWidth="150"/>
+            <TableColumn fx:id="licenseColumn" text="Número de Licença" prefWidth="150"/>
+            <TableColumn fx:id="statusColumn" text="Estado" prefWidth="100"/>
+            <TableColumn fx:id="editColumn" text="Editar" prefWidth="100"/>
+            <TableColumn fx:id="deleteColumn" text="Eliminar" prefWidth="100"/>
+        </columns>
+    </TableView>
+
+</VBox>
+
+</AnchorPane>
+

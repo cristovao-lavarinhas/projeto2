@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.projetojavafx.Controller.Admin.EstadoViaturaController" stylesheets="@../style.css">
+
+    <VBox spacing="20" alignment="TOP_LEFT" AnchorPane.topAnchor="20" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20" style="-fx-padding: 20; -fx-background-color: #f5f6fa;">
+
+        <Label text="Estado das Viaturas" styleClass="page-title"/>
+
+        <TableView fx:id="estadoViaturasTable" prefHeight="500" styleClass="modern-table">
+            <columns>
+                <TableColumn fx:id="marcaColumn" text="Marca"/>
+                <TableColumn fx:id="modeloColumn" text="Modelo"/>
+                <TableColumn fx:id="matriculaColumn" text="Matrícula"/>
+                <TableColumn fx:id="estadoColumn" text="Estado"/>
+                <TableColumn fx:id="inspecaoColumn" text="Última Inspeção"/>
+                <TableColumn fx:id="acoesColumn" text="Ações"/>
+            </columns>
+        </TableView>
+
+    </VBox>
+</AnchorPane>

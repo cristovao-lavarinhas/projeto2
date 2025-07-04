@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Pos?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.projetojavafx.Controller.Driver.PerfilMotoristaController">
+    <VBox alignment="TOP_LEFT" spacing="25" style="-fx-background-color: #f7f8fa; -fx-padding: 30;"
+          AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+        <Label text="Meu Perfil" style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #222;" />
+        <GridPane hgap="20" vgap="15" alignment="TOP_LEFT">
+            <Label text="Nome:" GridPane.rowIndex="0" GridPane.columnIndex="0" />
+            <TextField fx:id="nomeField" GridPane.rowIndex="0" GridPane.columnIndex="1" />
+            <Label text="Email:" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+            <TextField fx:id="emailField" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+            <Label text="Telefone:" GridPane.rowIndex="2" GridPane.columnIndex="0" />
+            <TextField fx:id="telefoneField" GridPane.rowIndex="2" GridPane.columnIndex="1" />
+            <Label text="Morada:" GridPane.rowIndex="3" GridPane.columnIndex="0" />
+            <TextField fx:id="moradaField" GridPane.rowIndex="3" GridPane.columnIndex="1" />
+            <Label text="Licença Motorista:" GridPane.rowIndex="4" GridPane.columnIndex="0" />
+            <TextField fx:id="licencaField" GridPane.rowIndex="4" GridPane.columnIndex="1" editable="false" style="-fx-font-weight: bold;" />
+            <Label text="IBAN:" GridPane.rowIndex="5" GridPane.columnIndex="0" />
+            <TextField fx:id="ibanField" GridPane.rowIndex="5" GridPane.columnIndex="1" />
+            <Label text="Estado:" GridPane.rowIndex="6" GridPane.columnIndex="0" />
+            <Label fx:id="estadoLabel" GridPane.rowIndex="6" GridPane.columnIndex="1" style="-fx-font-weight: bold; -fx-text-fill: #219653;" />
+            <Label text="Último login:" GridPane.rowIndex="7" GridPane.columnIndex="0" />
+            <Label fx:id="ultimoLoginLabel" GridPane.rowIndex="7" GridPane.columnIndex="1" />
+            <Label text="Palavra-passe:" GridPane.rowIndex="8" GridPane.columnIndex="0" />
+            <Button text="Alterar Palavra-passe" fx:id="alterarPasswordButton" GridPane.rowIndex="8" GridPane.columnIndex="1" style="-fx-background-color: #2d8cff; -fx-text-fill: white; -fx-background-radius: 8;" />
+        </GridPane>
+        <HBox alignment="CENTER_LEFT">
+            <Button text="Guardar Alterações" fx:id="guardarButton" style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-size: 16px; -fx-background-radius: 8;" />
+        </HBox>
+        <Label fx:id="feedbackLabel" text="" style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-padding: 0 0 0 10;" visible="false" />
+    </VBox>
+</AnchorPane> 

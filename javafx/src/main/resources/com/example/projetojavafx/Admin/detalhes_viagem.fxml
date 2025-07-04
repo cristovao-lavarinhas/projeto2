@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.projetojavafx.Controller.Admin.DetalhesViagemController"
+      spacing="10" alignment="CENTER_LEFT" style="-fx-padding: 20;">
+
+    <Label text="Detalhes da Viagem" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+
+    <Label fx:id="motoristaLabel" text="Motorista:" />
+    <Label fx:id="partidaLabel" text="Partida:" />
+    <Label fx:id="destinoLabel" text="Destino:" />
+    <Label fx:id="dataLabel" text="Data da Viagem:" />
+    <Label fx:id="estadoLabel" text="Estado:" />
+
+    <Button text="Fechar" onAction="#fecharJanela" />
+</VBox>

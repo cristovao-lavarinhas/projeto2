@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Pos?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.projetojavafx.Controller.Driver.DetalhesViagemController">
+    <VBox alignment="TOP_CENTER" spacing="18" style="-fx-background-color: white; -fx-padding: 30; -fx-background-radius: 12;">
+        <Label text="Detalhes da Viagem" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #233a80;" />
+        <GridPane hgap="20" vgap="10">
+            <Label text="Data:" GridPane.rowIndex="0" GridPane.columnIndex="0" />
+            <Label fx:id="dataLabel" GridPane.rowIndex="0" GridPane.columnIndex="1" />
+            <Label text="Hora:" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+            <Label fx:id="horaLabel" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+            <Label text="Origem:" GridPane.rowIndex="2" GridPane.columnIndex="0" />
+            <Label fx:id="origemLabel" GridPane.rowIndex="2" GridPane.columnIndex="1" />
+            <Label text="Destino:" GridPane.rowIndex="3" GridPane.columnIndex="0" />
+            <Label fx:id="destinoLabel" GridPane.rowIndex="3" GridPane.columnIndex="1" />
+            <Label text="Cliente:" GridPane.rowIndex="4" GridPane.columnIndex="0" />
+            <Label fx:id="clienteLabel" GridPane.rowIndex="4" GridPane.columnIndex="1" />
+            <Label text="Valor:" GridPane.rowIndex="5" GridPane.columnIndex="0" />
+            <Label fx:id="valorLabel" GridPane.rowIndex="5" GridPane.columnIndex="1" />
+            <Label text="Estado:" GridPane.rowIndex="6" GridPane.columnIndex="0" />
+            <Label fx:id="estadoLabel" GridPane.rowIndex="6" GridPane.columnIndex="1" />
+            <Label text="Avaliação:" GridPane.rowIndex="7" GridPane.columnIndex="0" />
+            <Label fx:id="avaliacaoLabel" GridPane.rowIndex="7" GridPane.columnIndex="1" />
+        </GridPane>
+        <Button text="Exportar PDF" fx:id="exportarPdfButton" style="-fx-background-color: #f2c200; -fx-text-fill: #222; -fx-background-radius: 8;" />
+        <Button text="Fechar" fx:id="fecharButton" style="-fx-background-color: #e0e0e0; -fx-background-radius: 8;" />
+    </VBox>
+</AnchorPane> 

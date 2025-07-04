@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.projetojavafx.Controller.Admin.SuporteController"
+            prefWidth="900" prefHeight="620">
+
+    <!-- Título -->
+    <Label text="Suporte ao Utilizador" layoutX="20" layoutY="20"
+           style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+
+    <!-- Filtros -->
+    <HBox spacing="20" layoutX="20" layoutY="70">
+        <Label text="Tipo:"/>
+        <ComboBox fx:id="comboTipoUtilizador" prefWidth="150" promptText="Tipo de utilizador"/>
+
+        <Label text="Estado:"/>
+        <ComboBox fx:id="comboEstado" prefWidth="150" promptText="Estado do ticket"/>
+    </HBox>
+
+    <!-- Histórico de Tickets -->
+    <Label text="Histórico de Mensagens / Tickets" layoutX="20" layoutY="120"
+           style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+    <ListView fx:id="listaTickets" layoutX="20" layoutY="150" prefWidth="860" prefHeight="200"
+              style="-fx-background-radius: 8;"/>
+
+    <!-- Campo de Mensagem -->
+    <Label text="Nova Mensagem" layoutX="20" layoutY="370"
+           style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+    <TextArea fx:id="campoMensagem" layoutX="20" layoutY="400" prefWidth="860" prefHeight="100"
+              promptText="Escreve a tua mensagem aqui..." wrapText="true"
+              style="-fx-background-radius: 8;"/>
+
+    <!-- Botões -->
+    <HBox spacing="15" layoutX="20" layoutY="520">
+        <Button fx:id="botaoEnviar" text="Enviar" onAction="#enviarMensagem"
+                style="-fx-background-color: #66bb6a; -fx-text-fill: white; -fx-background-radius: 8;"/>
+        <Button text="Resposta Automática" onAction="#gerarRespostaAutomatica"
+                style="-fx-background-color: #42a5f5; -fx-text-fill: white; -fx-background-radius: 8;"/>
+        <Button text="Exportar CSV" onAction="#exportarCSV"
+                style="-fx-background-color: #ffa726; -fx-text-fill: white; -fx-background-radius: 8;"/>
+    </HBox>
+
+</AnchorPane>

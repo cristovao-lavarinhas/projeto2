@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Pos?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.projetojavafx.Controller.Driver.MotoristaDashboardController"
+            stylesheets="@../style.css">
+
+    <!-- Sidebar -->
+    <left>
+        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" styleClass="sidebar-scroll">
+            <VBox fx:id="sidebar" styleClass="sidebar" spacing="10" maxWidth="250" minWidth="80" prefWidth="200">
+                <Label text="Dashboard Motorista" styleClass="menu-section-header"/>
+
+                <Separator/>
+
+                <!-- Gestão de Viagens -->
+                <Label text="Viagens" styleClass="menu-section-header"/>
+                <VBox styleClass="menu-section">
+                    <Button text="Histórico de Viagens" onAction="#historicoViagens" styleClass="menu-button"/>
+                    <Button text="Viagens Ativas" onAction="#viagensAtivas" styleClass="menu-button"/>
+                    <Button text="Meu Perfil" onAction="#perfilMotorista" styleClass="menu-button"/>
+                </VBox>
+
+                <Separator/>
+
+                <!-- Pagamentos -->
+                <Label text="Pagamentos" styleClass="menu-section-header"/>
+                <VBox styleClass="menu-section">
+                    <Button text="Ver Pagamentos" onAction="#verPagamentos" styleClass="menu-button"/>
+                    <Button text="Extrato de Pagamento" onAction="#extratoPagamento" styleClass="menu-button"/>
+                </VBox>
+
+                <Separator/>
+
+                <!-- Suporte -->
+                <Label text="Suporte" styleClass="menu-section-header"/>
+                <VBox styleClass="menu-section">
+                    <Button text="Contatar Suporte" onAction="#contatarSuporte" styleClass="menu-button"/>
+                </VBox>
+            </VBox>
+        </ScrollPane>
+    </left>
+
+    <!-- Topbar -->
+    <top>
+        <HBox spacing="20" alignment="CENTER_LEFT"
+              style="-fx-padding: 10; -fx-background-color: white; -fx-border-bottom: 1px solid #ccc;">
+            <Pane HBox.hgrow="ALWAYS"/>
+
+            <TextField fx:id="searchField" promptText="Buscar..." styleClass="search-bar"/>
+            <Label fx:id="greetingLabel" styleClass="user-greeting" text="Bem-vindo, Motorista"/>
+            <Button text="Logout" onAction="#handleLogout" styleClass="logout-button"/>
+        </HBox>
+    </top>
+
+    <!-- Área Principal -->
+    <center>
+        <StackPane fx:id="contentArea" styleClass="content-area">
+            <!-- Conteúdo da página (historico de viagens, extrato, etc.) será carregado aqui -->
+        </StackPane>
+    </center>
+
+</BorderPane>

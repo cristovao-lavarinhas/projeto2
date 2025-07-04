@@ -1,0 +1,32 @@
+# Build directories
+/javafx/build/
+/backend_springboot/build/
+/backend_springboot/bin/
+
+# Distribution files
+**/distributions/
+**/*.tar
+**/*.zip
+**/*.jar
+
+# Gradle
+.gradle/
+**/gradle/
+gradlew
+gradlew.bat
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.temp

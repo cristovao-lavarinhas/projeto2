@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Pos?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.projetojavafx.Controller.Admin.AssociarViaturaController" stylesheets="@../style.css">
+
+    <VBox spacing="20" alignment="TOP_LEFT" AnchorPane.topAnchor="20" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20" AnchorPane.bottomAnchor="20" style="-fx-background-color: #f5f6fa;">
+
+        <Label text="Associar Viatura a Motorista" styleClass="page-title"/>
+
+        <GridPane hgap="20" vgap="20" style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 20;">
+
+            <Label text="Selecione o Motorista:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+            <ComboBox fx:id="motoristaComboBox" prefWidth="300" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+            <Label text="Selecione a Viatura:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+            <ComboBox fx:id="viaturaComboBox" prefWidth="300" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+        </GridPane>
+
+        <Button text="Associar" onAction="#handleAssociar" styleClass="save-button" alignment="CENTER"/>
+
+    </VBox>
+
+</AnchorPane>

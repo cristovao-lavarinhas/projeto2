@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Pos?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.projetojavafx.Controller.Driver.SuporteController">
+    <VBox spacing="20" alignment="CENTER" style="-fx-background-color: white; -fx-padding: 20;">
+        <Label text="Contatar Suporte" styleClass="section-title"/>
+        <TextArea fx:id="mensagemTextArea" promptText="Escreva sua mensagem..." styleClass="input-area"/>
+        <Button text="Enviar Mensagem" onAction="#handleSendMessage" styleClass="action-button"/>
+    </VBox>
+</AnchorPane>

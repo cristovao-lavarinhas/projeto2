@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Pos?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.projetojavafx.Controller.Admin.RegistarViaturaController" stylesheets="@../style.css">
+
+    <VBox spacing="20" alignment="TOP_LEFT" AnchorPane.topAnchor="20" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20" AnchorPane.bottomAnchor="20" style="-fx-background-color: #f5f6fa;">
+
+        <Label text="Registar Nova Viatura" styleClass="page-title"/>
+
+        <GridPane hgap="20" vgap="20" style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 20;">
+
+            <Label text="Marca:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+            <TextField fx:id="marcaField" promptText="Ex: Tesla" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+            <Label text="Modelo:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+            <TextField fx:id="modeloField" promptText="Ex: Model 3" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+            <Label text="Matrícula:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+            <TextField fx:id="matriculaField" promptText="Ex: 00-AA-00" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+            <Label text="Ano:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+            <TextField fx:id="anoField" promptText="Ex: 2022" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+            <Label text="Cor:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+            <TextField fx:id="corField" promptText="Ex: Preto" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+
+            <Label text="Seguro Ativo:" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+            <CheckBox fx:id="seguroCheckBox" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+
+        </GridPane>
+
+        <Button text="Guardar Viatura" onAction="#handleGuardarViatura" styleClass="save-button" alignment="CENTER"/>
+
+    </VBox>
+
+</AnchorPane>

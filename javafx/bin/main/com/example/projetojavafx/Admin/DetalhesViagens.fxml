@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml" stylesheets="@../style.css" fx:controller="com.example.projetojavafx.Controller.DetalhesViagensController">
+    <Label text="Detalhes Viagens" styleClass="title-label" layoutX="20" layoutY="20"/>
+</AnchorPane>

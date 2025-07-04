@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Pos?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.projetojavafx.Controller.Driver.ExtratoPagamentosController">
+    <VBox spacing="20" alignment="CENTER" style="-fx-background-color: white; -fx-padding: 20;">
+        <Label text="Extrato de Pagamento" styleClass="section-title"/>
+        <TextArea fx:id="extratoTextArea" styleClass="text-area" editable="false"/>
+    </VBox>
+</AnchorPane>

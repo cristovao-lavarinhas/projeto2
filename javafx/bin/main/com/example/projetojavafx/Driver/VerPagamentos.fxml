@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Pos?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.projetojavafx.Controller.Driver.VerPagamentosController">
+    <VBox alignment="TOP_CENTER" spacing="30" style="-fx-background-color: #f7f8fa; -fx-padding: 20;"
+          AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+        <!-- Header -->
+        <HBox alignment="CENTER_LEFT" spacing="20">
+            <Label text="Pagamentos" style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #222;" />
+            <Region HBox.hgrow="ALWAYS" />
+            <ComboBox fx:id="estadoFilterCombo" promptText="Filtrar estado" style="-fx-pref-width: 150; -fx-background-radius: 8;" />
+            <DatePicker fx:id="dataInicioPicker" promptText="Data início" style="-fx-pref-width: 120; -fx-background-radius: 8;" />
+            <DatePicker fx:id="dataFimPicker" promptText="Data fim" style="-fx-pref-width: 120; -fx-background-radius: 8;" />
+            <Button text="Exportar PDF" fx:id="exportarPdfButton" style="-fx-background-color: #f2c200; -fx-text-fill: #222; -fx-background-radius: 8;" disable="true" />
+            <Button text="Download Recibo" fx:id="downloadReciboButton" style="-fx-background-color: #e0e0e0; -fx-text-fill: #222; -fx-background-radius: 8;" disable="true" />
+        </HBox>
+        <Label fx:id="feedbackLabel" text="" style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-padding: 0 0 0 10;" visible="false" />
+
+        <!-- Card/Table Section -->
+        <StackPane style="-fx-background-color: white; -fx-background-radius: 12; -fx-effect: dropshadow(gaussian, #dbeafe, 10, 0.2, 0, 2); -fx-padding: 30;" VBox.vgrow="ALWAYS">
+            <TableView fx:id="pagamentosTable" style="-fx-background-radius: 8;">
+                <columns>
+                    <TableColumn fx:id="dataColumn" text="Data" minWidth="100" />
+                    <TableColumn fx:id="valorColumn" text="Valor" minWidth="100" />
+                    <TableColumn fx:id="estadoColumn" text="Estado" minWidth="100" />
+                    <TableColumn fx:id="referenciaColumn" text="Referência" minWidth="120" />
+                    <TableColumn fx:id="descricaoColumn" text="Descrição" minWidth="180" />
+                    <TableColumn fx:id="detalhesColumn" text="Detalhes" minWidth="90" />
+                </columns>
+            </TableView>
+        </StackPane>
+
+        <!-- Footer/Info -->
+        <HBox alignment="CENTER_RIGHT" spacing="30">
+            <Label fx:id="totalRecebidoLabel" text="Total recebido: 0,00€" style="-fx-text-fill: #219653; -fx-font-size: 13px;" />
+            <Label fx:id="totalPendenteLabel" text="Total pendente: 0,00€" style="-fx-text-fill: #f2c200; -fx-font-size: 13px;" />
+        </HBox>
+    </VBox>
+</AnchorPane>

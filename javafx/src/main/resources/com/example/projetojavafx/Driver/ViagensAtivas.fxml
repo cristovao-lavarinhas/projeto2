@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Pos?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.projetojavafx.Controller.Driver.ViagensAtivasController">
+    <VBox alignment="TOP_CENTER" spacing="30" style="-fx-background-color: #f7f8fa; -fx-padding: 20;"
+          AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+        <!-- Header -->
+        <HBox alignment="CENTER_LEFT" spacing="20">
+            <Label text="Viagens Ativas" style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #222;" />
+            <Region HBox.hgrow="ALWAYS" />
+            <ComboBox fx:id="estadoFilterCombo" promptText="Filtrar estado" style="-fx-pref-width: 150; -fx-background-radius: 8;" />
+            <TextField fx:id="searchField" promptText="Pesquisar viagem..." style="-fx-pref-width: 250; -fx-background-radius: 8;" />
+            <Button text="Pesquisar" fx:id="searchButton" style="-fx-background-color: #2d8cff; -fx-text-fill: white; -fx-background-radius: 8;" />
+        </HBox>
+        <Label fx:id="feedbackLabel" text="" style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-padding: 0 0 0 10;" visible="false" />
+
+        <!-- Card/Table Section -->
+        <StackPane style="-fx-background-color: white; -fx-background-radius: 12; -fx-effect: dropshadow(gaussian, #dbeafe, 10, 0.2, 0, 2); -fx-padding: 30;" VBox.vgrow="ALWAYS">
+            <TableView fx:id="viagensTable" style="-fx-background-radius: 8;">
+                <columns>
+                    <TableColumn fx:id="dataColumn" text="Data" minWidth="100" />
+                    <TableColumn fx:id="clienteColumn" text="Cliente" minWidth="180" />
+                    <TableColumn fx:id="origemColumn" text="Origem" minWidth="150" />
+                    <TableColumn fx:id="destinoColumn" text="Destino" minWidth="150" />
+                    <TableColumn fx:id="statusColumn" text="Status" minWidth="100" />
+                    <TableColumn fx:id="aceitarColumn" text="Aceitar" minWidth="90" />
+                    <TableColumn fx:id="recusarColumn" text="Recusar" minWidth="90" />
+                </columns>
+            </TableView>
+        </StackPane>
+
+        <!-- Footer/Info -->
+        <HBox alignment="CENTER_RIGHT">
+            <Label fx:id="infoLabel" text="Total de viagens: 0" style="-fx-text-fill: #888; -fx-font-size: 13px;" />
+        </HBox>
+    </VBox>
+</AnchorPane>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.projetojavafx.Controller.Admin.ExportarRelatoriosController"
+            prefWidth="700" prefHeight="500">
+
+    <Label text="Exportar Relatórios de Pagamentos"
+           layoutX="20" layoutY="20"
+           style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+
+    <!-- Filtros -->
+    <HBox spacing="10" layoutX="20" layoutY="70">
+        <Label text="De:"/>
+        <DatePicker fx:id="dataInicioPicker"/>
+        <Label text="Até:"/>
+        <DatePicker fx:id="dataFimPicker"/>
+    </HBox>
+
+    <HBox spacing="10" layoutX="20" layoutY="120">
+        <Label text="Motorista:"/>
+        <ComboBox fx:id="motoristaCombo" promptText="Todos os motoristas" prefWidth="200"/>
+    </HBox>
+
+    <!-- Botões de Exportação -->
+    <HBox spacing="20" layoutX="20" layoutY="180">
+        <Button text="Exportar para PDF" onAction="#exportarPDF" />
+        <Button text="Exportar para CSV" onAction="#exportarCSV" />
+    </HBox>
+
+    <!-- Mensagem de confirmação -->
+    <Label fx:id="mensagemLabel" layoutX="20" layoutY="230" text="" style="-fx-text-fill: green;"/>
+
+</AnchorPane>
