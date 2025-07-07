@@ -23,12 +23,14 @@
                 <VBox styleClass="menu-section">
                     <Button text="Histórico de Viagens" onAction="#historicoViagens" styleClass="menu-button"/>
                     <Button text="Viagens Ativas" onAction="#viagensAtivas" styleClass="menu-button"/>
+                    <Button text="Calendário" onAction="#calendarioViagens" styleClass="menu-button"/>
                 </VBox>
 
                 <Label text="Motorista" styleClass="menu-section-header"/>
                 <VBox styleClass="menu-section">
                     <Button text="Meu Perfil" onAction="#perfilMotorista" styleClass="menu-button"/>
                     <Button text="Minha Viatura" onAction="#minhaViatura" styleClass="menu-button"/>
+                    <Button text="Avaliações" onAction="#verAvaliacoes" styleClass="menu-button"/>
                 </VBox>
 
                 <Separator/>
@@ -53,11 +55,17 @@
     <!-- Topbar -->
     <top>
         <HBox spacing="20" alignment="CENTER_LEFT"
-              style="-fx-padding: 10; -fx-background-color: white; -fx-border-bottom: 1px solid #ccc;">
+              style="-fx-padding: 10; -fx-background-color: white; -fx-border-bottom-width: 1; -fx-border-bottom-color: #ccc;">
+            <ImageView fx:id="logoImageView" fitHeight="38" fitWidth="60" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;"/>
             <Pane HBox.hgrow="ALWAYS"/>
 
             <TextField fx:id="searchField" promptText="Buscar..." styleClass="search-bar"/>
             <Label fx:id="greetingLabel" styleClass="user-greeting" text="Bem-vindo, Motorista"/>
+
+            <!-- Indicador de Status -->
+            <HBox fx:id="statusIndicator" spacing="8" alignment="CENTER" styleClass="status-indicator">
+                <Label fx:id="statusLabel" text="🚫 INDISPONÍVEL" styleClass="status-text"/>
+            </HBox>
 
             <!-- Botão de Notificações -->
             <StackPane fx:id="notificationButtonPane">

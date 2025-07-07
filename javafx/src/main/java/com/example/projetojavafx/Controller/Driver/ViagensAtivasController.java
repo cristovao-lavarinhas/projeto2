@@ -6,6 +6,8 @@ import java.net.URI;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -20,6 +22,7 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
+import javafx.scene.layout.HBox;
 
 public class ViagensAtivasController {
 
@@ -36,9 +39,7 @@ public class ViagensAtivasController {
     @FXML
     private TableColumn<ViagemAtiva, String> statusColumn;
     @FXML
-    private TableColumn<ViagemAtiva, Void> aceitarColumn;
-    @FXML
-    private TableColumn<ViagemAtiva, Void> recusarColumn;
+    private TableColumn<ViagemAtiva, Void> acoesColumn;
     @FXML
     private TableColumn<ViagemAtiva, Void> mapaColumn;
     @FXML
@@ -56,11 +57,42 @@ public class ViagensAtivasController {
 
     @FXML
     public void initialize() {
+        // Configurar colunas
         dataColumn.setCellValueFactory(new PropertyValueFactory<>("data"));
         clienteColumn.setCellValueFactory(new PropertyValueFactory<>("cliente"));
         origemColumn.setCellValueFactory(new PropertyValueFactory<>("origem"));
         destinoColumn.setCellValueFactory(new PropertyValueFactory<>("destino"));
         statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
+
+        // Aplicar estilos modernos à tabela
+        viagensTable.setStyle("-fx-background-color: white; -fx-table-cell-border-color: transparent;");
+        
+        // Zebra striping e hover effects
+        viagensTable.setRowFactory(tv -> {
+            TableRow<ViagemAtiva> row = new TableRow<>();
+            row.setOnMouseEntered(e -> {
+                if (!row.isEmpty()) {
+                    row.setStyle("-fx-background-color: #f8f9fa; -fx-background-radius: 8;");
+                }
+            });
+            row.setOnMouseExited(e -> {
+                if (!row.isEmpty()) {
+                    int index = row.getIndex();
+                    if (index % 2 == 0) {
+                        row.setStyle("-fx-background-color: white;");
+                    } else {
+                        row.setStyle("-fx-background-color: #f8f9fa;");
+                    }
+                }
+            });
+            row.setOnMouseClicked(event -> {
+                if (!row.isEmpty() && event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
+                    ViagemAtiva viagem = row.getItem();
+                    mostrarDetalhesViagem(viagem);
+                }
+            });
+            return row;
+        });
 
         // Exemplo de dados
         viagens.addAll(
@@ -79,56 +111,44 @@ public class ViagensAtivasController {
             feedbackLabel.setVisible(false);
         }
 
-        // Coluna Aceitar
-        aceitarColumn.setCellFactory(col -> new TableCell<ViagemAtiva, Void>() {
-            private final Button btn = new Button("Aceitar");
+        // Coluna de Ações (Aceitar/Recusar agrupados)
+        acoesColumn.setCellFactory(col -> new TableCell<ViagemAtiva, Void>() {
+            private final HBox actionBox = new HBox(5);
+            private final Button aceitarBtn = new Button("✅ Aceitar");
+            private final Button recusarBtn = new Button("❌ Recusar");
+            
             {
-                btn.setStyle("-fx-background-color: #e0e0e0; -fx-text-fill: #333; -fx-background-radius: 8;");
-                btn.setTooltip(new Tooltip("Aceitar esta viagem"));
-                btn.setOnAction(e -> {
+                // Configurar HBox
+                actionBox.setAlignment(Pos.CENTER);
+                actionBox.setPadding(new Insets(2));
+                
+                // Estilo dos botões
+                String baseStyle = "-fx-background-radius: 6; -fx-font-size: 11px; -fx-padding: 4 8; -fx-min-width: 70px;";
+                aceitarBtn.setStyle(baseStyle + "-fx-background-color: #e8f5e8; -fx-text-fill: #2e7d32; -fx-border-color: #4caf50; -fx-border-radius: 6;");
+                recusarBtn.setStyle(baseStyle + "-fx-background-color: #ffebee; -fx-text-fill: #c62828; -fx-border-color: #f44336; -fx-border-radius: 6;");
+                
+                // Tooltips
+                aceitarBtn.setTooltip(new Tooltip("Aceitar esta viagem"));
+                recusarBtn.setTooltip(new Tooltip("Recusar esta viagem"));
+                
+                // Hover effects
+                aceitarBtn.setOnMouseEntered(e -> aceitarBtn.setStyle(baseStyle + "-fx-background-color: #c8e6c9; -fx-text-fill: #1b5e20; -fx-border-color: #2e7d32; -fx-border-radius: 6;"));
+                aceitarBtn.setOnMouseExited(e -> aceitarBtn.setStyle(baseStyle + "-fx-background-color: #e8f5e8; -fx-text-fill: #2e7d32; -fx-border-color: #4caf50; -fx-border-radius: 6;"));
+                recusarBtn.setOnMouseEntered(e -> recusarBtn.setStyle(baseStyle + "-fx-background-color: #ffcdd2; -fx-text-fill: #b71c1c; -fx-border-color: #d32f2f; -fx-border-radius: 6;"));
+                recusarBtn.setOnMouseExited(e -> recusarBtn.setStyle(baseStyle + "-fx-background-color: #ffebee; -fx-text-fill: #c62828; -fx-border-color: #f44336; -fx-border-radius: 6;"));
+                
+                // Ações dos botões
+                aceitarBtn.setOnAction(e -> {
                     ViagemAtiva viagem = getTableView().getItems().get(getIndex());
                     if (!viagem.getStatus().equalsIgnoreCase("Aceite")) {
                         viagem.setStatus("Aceite");
-                        btn.setDisable(true);
-                        TableCell<ViagemAtiva, Void> cell = this;
-                        TableRow<ViagemAtiva> row = cell.getTableRow();
-                        TableCell<ViagemAtiva, Void> recusarCell = (TableCell<ViagemAtiva, Void>) row.getChildrenUnmodifiable().get(6);
-                        recusarCell.setDisable(true);
-                        mostrarFeedback("Viagem aceite com sucesso!", true);
+                        atualizarBotoesAcao(viagem);
+                        mostrarFeedback("✅ Viagem aceite com sucesso!", true);
                         viagensTable.refresh();
-                        // Aqui podes chamar o backend para atualizar o estado
                     }
                 });
-            }
-            @Override
-            protected void updateItem(Void item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty) {
-                    setGraphic(null);
-                } else {
-                    ViagemAtiva viagem = getTableView().getItems().get(getIndex());
-                    if (viagem.getStatus().equalsIgnoreCase("Aceite")) {
-                        btn.setDisable(true);
-                        btn.setStyle("-fx-background-color: #27ae60; -fx-text-fill: white; -fx-background-radius: 8;");
-                    } else if (viagem.getStatus().equalsIgnoreCase("Recusada")) {
-                        btn.setDisable(true);
-                        btn.setStyle("-fx-background-color: #e0e0e0; -fx-text-fill: #333; -fx-background-radius: 8;");
-                    } else {
-                        btn.setDisable(false);
-                        btn.setStyle("-fx-background-color: #e0e0e0; -fx-text-fill: #333; -fx-background-radius: 8;");
-                    }
-                    setGraphic(btn);
-                }
-            }
-        });
-
-        // Coluna Recusar
-        recusarColumn.setCellFactory(col -> new TableCell<ViagemAtiva, Void>() {
-            private final Button btn = new Button("Recusar");
-            {
-                btn.setStyle("-fx-background-color: #e0e0e0; -fx-text-fill: #333; -fx-background-radius: 8;");
-                btn.setTooltip(new Tooltip("Recusar esta viagem"));
-                btn.setOnAction(e -> {
+                
+                recusarBtn.setOnAction(e -> {
                     ViagemAtiva viagem = getTableView().getItems().get(getIndex());
                     if (!viagem.getStatus().equalsIgnoreCase("Recusada")) {
                         Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -138,19 +158,38 @@ public class ViagensAtivasController {
                         alert.showAndWait().ifPresent(result -> {
                             if (result.getText().equalsIgnoreCase("OK")) {
                                 viagem.setStatus("Recusada");
-                                btn.setDisable(true);
-                                TableCell<ViagemAtiva, Void> cell = this;
-                                TableRow<ViagemAtiva> row = cell.getTableRow();
-                                TableCell<ViagemAtiva, Void> aceitarCell = (TableCell<ViagemAtiva, Void>) row.getChildrenUnmodifiable().get(5);
-                                aceitarCell.setDisable(true);
-                                mostrarFeedback("Viagem recusada!", false);
+                                atualizarBotoesAcao(viagem);
+                                mostrarFeedback("❌ Viagem recusada!", false);
                                 viagensTable.refresh();
-                                // Aqui podes chamar o backend para atualizar o estado
                             }
                         });
                     }
                 });
+                
+                actionBox.getChildren().addAll(aceitarBtn, recusarBtn);
             }
+            
+            private void atualizarBotoesAcao(ViagemAtiva viagem) {
+                String baseStyle = "-fx-background-radius: 6; -fx-font-size: 11px; -fx-padding: 4 8; -fx-min-width: 70px;";
+                
+                if (viagem.getStatus().equalsIgnoreCase("Aceite")) {
+                    aceitarBtn.setDisable(true);
+                    aceitarBtn.setStyle(baseStyle + "-fx-background-color: #4caf50; -fx-text-fill: white; -fx-border-color: #2e7d32; -fx-border-radius: 6;");
+                    recusarBtn.setDisable(true);
+                    recusarBtn.setStyle(baseStyle + "-fx-background-color: #e0e0e0; -fx-text-fill: #757575; -fx-border-color: #bdbdbd; -fx-border-radius: 6;");
+                } else if (viagem.getStatus().equalsIgnoreCase("Recusada")) {
+                    aceitarBtn.setDisable(true);
+                    aceitarBtn.setStyle(baseStyle + "-fx-background-color: #e0e0e0; -fx-text-fill: #757575; -fx-border-color: #bdbdbd; -fx-border-radius: 6;");
+                    recusarBtn.setDisable(true);
+                    recusarBtn.setStyle(baseStyle + "-fx-background-color: #f44336; -fx-text-fill: white; -fx-border-color: #d32f2f; -fx-border-radius: 6;");
+                } else {
+                    aceitarBtn.setDisable(false);
+                    aceitarBtn.setStyle(baseStyle + "-fx-background-color: #e8f5e8; -fx-text-fill: #2e7d32; -fx-border-color: #4caf50; -fx-border-radius: 6;");
+                    recusarBtn.setDisable(false);
+                    recusarBtn.setStyle(baseStyle + "-fx-background-color: #ffebee; -fx-text-fill: #c62828; -fx-border-color: #f44336; -fx-border-radius: 6;");
+                }
+            }
+            
             @Override
             protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
@@ -158,22 +197,13 @@ public class ViagensAtivasController {
                     setGraphic(null);
                 } else {
                     ViagemAtiva viagem = getTableView().getItems().get(getIndex());
-                    if (viagem.getStatus().equalsIgnoreCase("Recusada")) {
-                        btn.setDisable(true);
-                        btn.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-background-radius: 8;");
-                    } else if (viagem.getStatus().equalsIgnoreCase("Aceite")) {
-                        btn.setDisable(true);
-                        btn.setStyle("-fx-background-color: #e0e0e0; -fx-text-fill: #333; -fx-background-radius: 8;");
-                    } else {
-                        btn.setDisable(false);
-                        btn.setStyle("-fx-background-color: #e0e0e0; -fx-text-fill: #333; -fx-background-radius: 8;");
-                    }
-                    setGraphic(btn);
+                    atualizarBotoesAcao(viagem);
+                    setGraphic(actionBox);
                 }
             }
         });
 
-        // Cores no status
+        // Cores no status com badges modernos
         statusColumn.setCellFactory(column -> new TableCell<ViagemAtiva, String>() {
             @Override
             protected void updateItem(String status, boolean empty) {
@@ -185,13 +215,13 @@ public class ViagensAtivasController {
                     setText(status);
                     switch (status.toLowerCase()) {
                         case "aceite":
-                            setStyle("-fx-background-color: #e6f9ea; -fx-text-fill: #219653; -fx-font-weight: bold;");
+                            setStyle("-fx-background-color: #e8f5e8; -fx-text-fill: #2e7d32; -fx-font-weight: bold; -fx-background-radius: 12; -fx-padding: 4 8; -fx-alignment: center;");
                             break;
                         case "recusada":
-                            setStyle("-fx-background-color: #fdeaea; -fx-text-fill: #d32f2f; -fx-font-weight: bold;");
+                            setStyle("-fx-background-color: #ffebee; -fx-text-fill: #c62828; -fx-font-weight: bold; -fx-background-radius: 12; -fx-padding: 4 8; -fx-alignment: center;");
                             break;
                         case "pendente":
-                            setStyle("-fx-background-color: #fffbe6; -fx-text-fill: #f2c200; -fx-font-weight: bold;");
+                            setStyle("-fx-background-color: #fff8e1; -fx-text-fill: #f57f17; -fx-font-weight: bold; -fx-background-radius: 12; -fx-padding: 4 8; -fx-alignment: center;");
                             break;
                         default:
                             setStyle("");
@@ -200,25 +230,19 @@ public class ViagensAtivasController {
             }
         });
 
-        // Detalhes da viagem ao clicar na linha
-        viagensTable.setRowFactory(tv -> {
-            TableRow<ViagemAtiva> row = new TableRow<>();
-            row.setOnMouseClicked(event -> {
-                if (!row.isEmpty() && event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
-                    ViagemAtiva viagem = row.getItem();
-                    mostrarDetalhesViagem(viagem);
-                }
-            });
-            return row;
-        });
-
-        // Coluna Mapa
+        // Coluna Mapa com ícone moderno
         if (mapaColumn != null) {
             mapaColumn.setCellFactory(col -> new TableCell<ViagemAtiva, Void>() {
-                private final Button btn = new Button("Mapa");
+                private final Button btn = new Button("🗺️ Mapa");
                 {
-                    btn.setStyle("-fx-background-color: #3498db; -fx-text-fill: white; -fx-background-radius: 8;");
-                    btn.setTooltip(new Tooltip("Abrir destino no Google Maps"));
+                    String mapStyle = "-fx-background-color: #2196f3; -fx-text-fill: white; -fx-background-radius: 8; -fx-font-size: 11px; -fx-padding: 6 12; -fx-min-width: 80px;";
+                    btn.setStyle(mapStyle);
+                    btn.setTooltip(new Tooltip("🗺️ Abrir rota no Google Maps"));
+                    
+                    // Hover effect
+                    btn.setOnMouseEntered(e -> btn.setStyle(mapStyle + "-fx-background-color: #1976d2;"));
+                    btn.setOnMouseExited(e -> btn.setStyle(mapStyle));
+                    
                     btn.setOnAction(e -> {
                         ViagemAtiva viagem = getTableView().getItems().get(getIndex());
                         abrirNoGoogleMaps(viagem.getOrigemLat(), viagem.getOrigemLng(), viagem.getDestinoLat(), viagem.getDestinoLng());

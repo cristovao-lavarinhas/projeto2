@@ -52,7 +52,7 @@
 
         <HBox alignment="CENTER">
             <Label text="Não tem conta?" />
-            <Hyperlink text="Criar conta" styleClass="signup-link"/>
+            <Hyperlink text="Criar conta" onAction="#abrirJanelaRegisto" styleClass="signup-link"/>
         </HBox>
     </VBox>
 </StackPane>

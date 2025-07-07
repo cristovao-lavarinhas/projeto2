@@ -34,18 +34,63 @@ public class MotoristaDashboardController {
     @FXML private StackPane notificationButtonPane;
     @FXML private Button notificationButton;
     @FXML private Label notificationBadge;
+    @FXML private HBox statusIndicator;
+    @FXML private Label statusLabel;
 
     private VBox notificationPopup;
     private List<Notificacao> notificacoes = new ArrayList<>();
     private Popup notificationPopupWindow;
+    private boolean motoristaDisponivel = false; // Estado inicial: indisponível
 
     @FXML
     public void initialize() {
         greetingLabel.setText("Bem-vindo, Motorista!");
+        configurarLogo();
+        configurarStatusInicial();
         mostrarResumoDashboard();
         mockNotificacoes();
         atualizarBadge();
         setupNotificationPopup();
+    }
+
+    private void configurarLogo() {
+        try {
+            javafx.scene.image.Image logo = new javafx.scene.image.Image(getClass().getResourceAsStream("/com/example/projetojavafx/icons/icon.png"));
+            logoImageView.setImage(logo);
+            logoImageView.setFitHeight(38);
+            logoImageView.setFitWidth(80);
+            logoImageView.setPreserveRatio(true);
+            logoImageView.setStyle("-fx-cursor: hand; -fx-padding: 0 16 0 8;");
+            logoImageView.setOnMouseClicked(e -> mostrarResumoDashboard());
+        } catch (Exception e) {
+            System.err.println("Erro ao carregar o logo: " + e.getMessage());
+        }
+    }
+
+    private void configurarStatusInicial() {
+        atualizarIndicadorStatus();
+    }
+
+    private void atualizarIndicadorStatus() {
+        if (motoristaDisponivel) {
+            statusLabel.setText("✅ DISPONÍVEL");
+            statusLabel.setStyle("-fx-text-fill: #4caf50; -fx-font-weight: bold; -fx-font-size: 14px;");
+        } else {
+            statusLabel.setText("🚫 INDISPONÍVEL");
+            statusLabel.setStyle("-fx-text-fill: #f44336; -fx-font-weight: bold; -fx-font-size: 14px;");
+        }
+    }
+
+    @FXML
+    private void alternarStatusRapido() {
+        motoristaDisponivel = !motoristaDisponivel;
+        atualizarIndicadorStatus();
+        
+        if (motoristaDisponivel) {
+            adicionarNotificacao("Status Atualizado", "Você está agora DISPONÍVEL para receber viagens!");
+        } else {
+            adicionarNotificacao("Status Atualizado", "Você está agora INDISPONÍVEL para receber viagens.");
+        }
     }
 
     private void loadPage(String fxmlPath) {
@@ -66,6 +111,9 @@ public class MotoristaDashboardController {
         Label titulo = new Label("Resumo Geral do Motorista");
         titulo.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
 
+        // Seção de Status do Motorista
+        VBox statusSection = criarSecaoStatus();
+        
         HBox cards = new HBox(30);
         cards.setAlignment(Pos.CENTER);
 
@@ -87,8 +135,98 @@ public class MotoristaDashboardController {
         );
         atividades.setMaxHeight(150);
 
-        resumoBox.getChildren().addAll(titulo, cards, ultimasLabel, atividades);
+        resumoBox.getChildren().addAll(titulo, statusSection, cards, ultimasLabel, atividades);
         contentArea.getChildren().setAll(resumoBox);
+    }
+
+    private VBox criarSecaoStatus() {
+        VBox statusSection = new VBox(15);
+        statusSection.setAlignment(Pos.CENTER);
+        statusSection.setPadding(new Insets(20));
+        statusSection.setStyle("-fx-background-color: white; -fx-background-radius: 12; -fx-border-color: #ddd; -fx-border-radius: 12; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 4, 0, 0, 1);");
+
+        Label statusTitulo = new Label("🏁 Status Atual");
+        statusTitulo.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
+
+        Label statusDescricao = new Label("Selecione seu status atual para começar a receber viagens");
+        statusDescricao.setStyle("-fx-font-size: 14px; -fx-text-fill: #666; -fx-text-alignment: center;");
+
+        HBox botoesStatus = new HBox(20);
+        botoesStatus.setAlignment(Pos.CENTER);
+
+        Button btnDisponivel = new Button("✅ DISPONÍVEL");
+        btnDisponivel.setStyle("-fx-background-color: #4caf50; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 16px; -fx-padding: 15 30; -fx-background-radius: 25; -fx-cursor: hand;");
+        btnDisponivel.setOnAction(e -> definirStatusDisponivel());
+
+        Button btnIndisponivel = new Button("⏸️ INDISPONÍVEL");
+        btnIndisponivel.setStyle("-fx-background-color: #f44336; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 16px; -fx-padding: 15 30; -fx-background-radius: 25; -fx-cursor: hand;");
+        btnIndisponivel.setOnAction(e -> definirStatusIndisponivel());
+
+        botoesStatus.getChildren().addAll(btnDisponivel, btnIndisponivel);
+
+        // Efeitos hover
+        btnDisponivel.setOnMouseEntered(e -> btnDisponivel.setStyle("-fx-background-color: #45a049; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 16px; -fx-padding: 15 30; -fx-background-radius: 25; -fx-cursor: hand;"));
+        btnDisponivel.setOnMouseExited(e -> btnDisponivel.setStyle("-fx-background-color: #4caf50; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 16px; -fx-padding: 15 30; -fx-background-radius: 25; -fx-cursor: hand;"));
+
+        btnIndisponivel.setOnMouseEntered(e -> btnIndisponivel.setStyle("-fx-background-color: #da190b; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 16px; -fx-padding: 15 30; -fx-background-radius: 25; -fx-cursor: hand;"));
+        btnIndisponivel.setOnMouseExited(e -> btnIndisponivel.setStyle("-fx-background-color: #f44336; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 16px; -fx-padding: 15 30; -fx-background-radius: 25; -fx-cursor: hand;"));
+
+        statusSection.getChildren().addAll(statusTitulo, statusDescricao, botoesStatus);
+        return statusSection;
+    }
+
+    private void definirStatusDisponivel() {
+        motoristaDisponivel = true;
+        atualizarIndicadorStatus();
+        adicionarNotificacao("Status Atualizado", "Você está agora DISPONÍVEL para receber viagens!");
+        mostrarConfirmacaoStatus("✅ DISPONÍVEL", "Você está agora disponível para receber viagens!");
+    }
+
+    private void definirStatusIndisponivel() {
+        motoristaDisponivel = false;
+        atualizarIndicadorStatus();
+        adicionarNotificacao("Status Atualizado", "Você está agora INDISPONÍVEL para receber viagens.");
+        mostrarConfirmacaoStatus("🚫 INDISPONÍVEL", "Você está agora indisponível para receber viagens.");
+    }
+
+    private void mostrarConfirmacaoStatus(String status, String mensagem) {
+        // Criar overlay de confirmação
+        VBox overlay = new VBox(15);
+        overlay.setAlignment(Pos.CENTER);
+        overlay.setStyle("-fx-background-color: rgba(0,0,0,0.8); -fx-background-radius: 15; -fx-padding: 30;");
+        overlay.setMaxSize(400, 200);
+        overlay.setMinSize(400, 200);
+
+        Label statusLabel = new Label(status);
+        statusLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: white;");
+
+        Label mensagemLabel = new Label(mensagem);
+        mensagemLabel.setStyle("-fx-font-size: 16px; -fx-text-fill: white; -fx-text-alignment: center;");
+
+        Button btnOk = new Button("OK");
+        btnOk.setStyle("-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20; -fx-background-radius: 8; -fx-cursor: hand;");
+        btnOk.setOnAction(e -> {
+            contentArea.getChildren().remove(overlay);
+        });
+
+        overlay.getChildren().addAll(statusLabel, mensagemLabel, btnOk);
+
+        // Adicionar overlay ao contentArea
+        contentArea.getChildren().add(overlay);
+        
+        // Remover automaticamente após 3 segundos
+        new Thread(() -> {
+            try {
+                Thread.sleep(3000);
+                javafx.application.Platform.runLater(() -> {
+                    if (contentArea.getChildren().contains(overlay)) {
+                        contentArea.getChildren().remove(overlay);
+                    }
+                });
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }).start();
     }
 
     private VBox criarCard(String titulo, String valor) {
@@ -245,6 +383,10 @@ public class MotoristaDashboardController {
     @FXML private void contatarSuporte() { loadPage("/com/example/projetojavafx/Driver/ContatarSuporte.fxml"); }
     @FXML private void perfilMotorista() { loadPage("/com/example/projetojavafx/Driver/PerfilMotorista.fxml"); }
     @FXML private void minhaViatura() { loadPage("/com/example/projetojavafx/Driver/EstadoViatura.fxml"); }
+    
+    // Novas funcionalidades
+    @FXML private void calendarioViagens() { loadPage("/com/example/projetojavafx/Driver/CalendarioViagens.fxml"); }
+    @FXML private void verAvaliacoes() { loadPage("/com/example/projetojavafx/Driver/Avaliacoes.fxml"); }
 
     // Logout do motorista
     @FXML

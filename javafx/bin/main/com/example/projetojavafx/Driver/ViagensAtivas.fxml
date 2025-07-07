@@ -19,15 +19,14 @@
 
         <!-- Card/Table Section -->
         <StackPane style="-fx-background-color: white; -fx-background-radius: 12; -fx-effect: dropshadow(gaussian, #dbeafe, 10, 0.2, 0, 2); -fx-padding: 30;" VBox.vgrow="ALWAYS">
-            <TableView fx:id="viagensTable" style="-fx-background-radius: 8;">
+            <TableView fx:id="viagensTable" styleClass="viagens-ativas-table">
                 <columns>
                     <TableColumn fx:id="dataColumn" text="Data" minWidth="100" />
                     <TableColumn fx:id="clienteColumn" text="Cliente" minWidth="180" />
                     <TableColumn fx:id="origemColumn" text="Origem" minWidth="150" />
                     <TableColumn fx:id="destinoColumn" text="Destino" minWidth="150" />
                     <TableColumn fx:id="statusColumn" text="Status" minWidth="100" />
-                    <TableColumn fx:id="aceitarColumn" text="Aceitar" minWidth="90" />
-                    <TableColumn fx:id="recusarColumn" text="Recusar" minWidth="90" />
+                    <TableColumn fx:id="acoesColumn" text="Ações" minWidth="160" />
                     <TableColumn fx:id="mapaColumn" text="Mapa" minWidth="80" />
                 </columns>
             </TableView>

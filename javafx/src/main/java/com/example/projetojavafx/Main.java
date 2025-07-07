@@ -4,16 +4,16 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.stage.Stage;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 
 
 public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         // Carregar o FXML inicial (AdminDashboard, Login, etc.)
-        //FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/projetojavafx/Admin/AdminDashboard.fxml"));
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/projetojavafx/Driver/MotoristaDashboard.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/projetojavafx/Admin/AdminDashboard.fxml"));
+        //FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/projetojavafx/Driver/MotoristaDashboard.fxml"));
         //FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/projetojavafx/Login.fxml"));
         //FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/projetojavafx/Splash.fxml"));
         Parent root = fxmlLoader.load();

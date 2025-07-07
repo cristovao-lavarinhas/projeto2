@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Pos?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.projetojavafx.Controller.Driver.EstatisticasController"
+      spacing="20" styleClass="page-container">
+
+    <!-- Cabeçalho -->
+    <HBox alignment="CENTER_LEFT" spacing="20" styleClass="page-header">
+        <Label text="📊 Estatísticas e Relatórios" styleClass="page-title"/>
+        <Pane HBox.hgrow="ALWAYS"/>
+        <ComboBox fx:id="periodoCombo" promptText="Período" styleClass="period-combo"/>
+        <Button text="Exportar PDF" onAction="#exportarPDF" styleClass="action-button"/>
+    </HBox>
+
+    <!-- Cards de Resumo -->
+    <HBox spacing="20" styleClass="stats-cards">
+        <VBox fx:id="cardViagens" styleClass="stat-card">
+            <Label text="Total de Viagens" styleClass="stat-card-title"/>
+            <Label fx:id="totalViagensLabel" text="0" styleClass="stat-card-value"/>
+            <Label fx:id="viagensCrescimento" text="+0%" styleClass="stat-card-growth"/>
+        </VBox>
+        
+        <VBox fx:id="cardGanhos" styleClass="stat-card">
+            <Label text="Ganhos Totais" styleClass="stat-card-title"/>
+            <Label fx:id="ganhosLabel" text="€0,00" styleClass="stat-card-value"/>
+            <Label fx:id="ganhosCrescimento" text="+0%" styleClass="stat-card-growth"/>
+        </VBox>
+        
+        <VBox fx:id="cardAvaliacao" styleClass="stat-card">
+            <Label text="Avaliação Média" styleClass="stat-card-title"/>
+            <Label fx:id="avaliacaoLabel" text="0.0" styleClass="stat-card-value"/>
+            <Label fx:id="avaliacaoCrescimento" text="+0%" styleClass="stat-card-growth"/>
+        </VBox>
+        
+        <VBox fx:id="cardTempo" styleClass="stat-card">
+            <Label text="Tempo Online" styleClass="stat-card-title"/>
+            <Label fx:id="tempoLabel" text="0h" styleClass="stat-card-value"/>
+            <Label fx:id="tempoCrescimento" text="+0%" styleClass="stat-card-growth"/>
+        </VBox>
+    </HBox>
+
+    <!-- Gráficos -->
+    <HBox spacing="20" styleClass="charts-container">
+        <!-- Gráfico de Viagens por Dia -->
+        <VBox fx:id="graficoViagens" styleClass="chart-container" HBox.hgrow="ALWAYS">
+            <Label text="Viagens por Dia" styleClass="chart-title"/>
+            <VBox fx:id="graficoViagensContent" styleClass="chart-content"/>
+        </VBox>
+        
+        <!-- Gráfico de Ganhos -->
+        <VBox fx:id="graficoGanhos" styleClass="chart-container" HBox.hgrow="ALWAYS">
+            <Label text="Ganhos por Semana" styleClass="chart-title"/>
+            <VBox fx:id="graficoGanhosContent" styleClass="chart-content"/>
+        </VBox>
+    </HBox>
+
+    <!-- Tabela de Desempenho -->
+    <VBox styleClass="performance-table-container">
+        <Label text="Desempenho Detalhado" styleClass="section-title"/>
+        <TableView fx:id="tabelaDesempenho" styleClass="performance-table">
+            <columns>
+                <TableColumn text="Data" fx:id="colData"/>
+                <TableColumn text="Viagens" fx:id="colViagens"/>
+                <TableColumn text="Ganhos" fx:id="colGanhos"/>
+                <TableColumn text="Avaliação" fx:id="colAvaliacao"/>
+                <TableColumn text="Tempo Online" fx:id="colTempo"/>
+            </columns>
+        </TableView>
+    </VBox>
+
+    <!-- Metas e Objetivos -->
+    <HBox spacing="20" styleClass="goals-container">
+        <VBox styleClass="goal-card" HBox.hgrow="ALWAYS">
+            <Label text="🎯 Metas do Mês" styleClass="goal-title"/>
+            <VBox fx:id="metasContainer" spacing="10"/>
+        </VBox>
+        
+        <VBox styleClass="goal-card" HBox.hgrow="ALWAYS">
+            <Label text="🏆 Conquistas" styleClass="goal-title"/>
+            <VBox fx:id="conquistasContainer" spacing="10"/>
+        </VBox>
+    </HBox>
+
+</VBox> 

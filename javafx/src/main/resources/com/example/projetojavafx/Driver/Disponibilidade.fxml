@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Pos?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.projetojavafx.Controller.Driver.DisponibilidadeController"
+      spacing="20" styleClass="page-container">
+
+    <!-- Cabeçalho -->
+    <HBox alignment="CENTER_LEFT" spacing="20" styleClass="page-header">
+        <Label text="⏰ Configurar Disponibilidade" styleClass="page-title"/>
+        <Pane HBox.hgrow="ALWAYS"/>
+        <Button text="Salvar Configurações" onAction="#salvarConfiguracoes" styleClass="action-button"/>
+    </HBox>
+
+    <!-- Status Atual -->
+    <HBox alignment="CENTER_LEFT" spacing="20" styleClass="status-container">
+        <Label text="Status Atual:" styleClass="status-label"/>
+        <ToggleButton fx:id="statusToggle" text="Disponível" onAction="#alternarStatus" styleClass="status-toggle"/>
+        <Label fx:id="statusInfo" text="Você está atualmente disponível para receber viagens" styleClass="status-info"/>
+    </HBox>
+
+    <!-- Horários de Trabalho -->
+    <VBox styleClass="schedule-container">
+        <Label text="Horários de Trabalho" styleClass="section-title"/>
+        
+        <HBox spacing="20" styleClass="schedule-controls">
+            <VBox styleClass="time-range">
+                <Label text="Horário de Início" styleClass="time-label"/>
+                <ComboBox fx:id="horaInicio" styleClass="time-combo"/>
+            </VBox>
+            
+            <VBox styleClass="time-range">
+                <Label text="Horário de Fim" styleClass="time-label"/>
+                <ComboBox fx:id="horaFim" styleClass="time-combo"/>
+            </VBox>
+            
+            <VBox styleClass="time-range">
+                <Label text="Intervalo de Descanso" styleClass="time-label"/>
+                <ComboBox fx:id="intervaloDescanso" styleClass="time-combo"/>
+            </VBox>
+        </HBox>
+    </VBox>
+
+    <!-- Calendário Semanal -->
+    <VBox styleClass="weekly-schedule">
+        <Label text="Disponibilidade Semanal" styleClass="section-title"/>
+        
+        <VBox fx:id="calendarioSemanal" spacing="5" styleClass="weekly-grid">
+            <!-- Dias da semana serão gerados dinamicamente -->
+        </VBox>
+    </VBox>
+
+    <!-- Configurações Avançadas -->
+    <VBox styleClass="advanced-settings">
+        <Label text="Configurações Avançadas" styleClass="section-title"/>
+        
+        <HBox spacing="20" styleClass="settings-grid">
+            <VBox styleClass="setting-item">
+                <Label text="Tipo de Viagem Preferida" styleClass="setting-label"/>
+                <ComboBox fx:id="tipoViagemCombo" styleClass="setting-combo"/>
+            </VBox>
+            
+            <VBox styleClass="setting-item">
+                <Label text="Distância Máxima" styleClass="setting-label"/>
+                <ComboBox fx:id="distanciaMaximaCombo" styleClass="setting-combo"/>
+            </VBox>
+            
+            <VBox styleClass="setting-item">
+                <Label text="Tarifa Mínima" styleClass="setting-label"/>
+                <TextField fx:id="tarifaMinimaField" promptText="€0,00" styleClass="setting-field"/>
+            </VBox>
+        </HBox>
+        
+        <HBox spacing="20" styleClass="settings-grid">
+            <VBox styleClass="setting-item">
+                <Label text="Notificações de Viagem" styleClass="setting-label"/>
+                <CheckBox fx:id="notificacoesViagem" text="Receber notificações" styleClass="setting-checkbox"/>
+            </VBox>
+            
+            <VBox styleClass="setting-item">
+                <Label text="Modo Automático" styleClass="setting-label"/>
+                <CheckBox fx:id="modoAutomatico" text="Aceitar viagens automaticamente" styleClass="setting-checkbox"/>
+            </VBox>
+            
+            <VBox styleClass="setting-item">
+                <Label text="Modo Silencioso" styleClass="setting-label"/>
+                <CheckBox fx:id="modoSilencioso" text="Apenas notificações importantes" styleClass="setting-checkbox"/>
+            </VBox>
+        </HBox>
+    </VBox>
+
+    <!-- Histórico de Disponibilidade -->
+    <VBox styleClass="availability-history">
+        <Label text="Histórico de Disponibilidade" styleClass="section-title"/>
+        
+        <TableView fx:id="tabelaHistorico" styleClass="history-table">
+            <columns>
+                <TableColumn text="Data" fx:id="colData"/>
+                <TableColumn text="Hora Início" fx:id="colHoraInicio"/>
+                <TableColumn text="Hora Fim" fx:id="colHoraFim"/>
+                <TableColumn text="Tempo Online" fx:id="colTempoOnline"/>
+                <TableColumn text="Viagens Aceites" fx:id="colViagensAceites"/>
+                <TableColumn text="Status" fx:id="colStatus"/>
+            </columns>
+        </TableView>
+    </VBox>
+
+</VBox> 

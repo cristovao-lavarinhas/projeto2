@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Pos?>
+
+<StackPane xmlns:fx="http://javafx.com/fxml"
+           fx:controller="com.example.projetojavafx.Controller.RegisterController"
+           style="-fx-background-color: white;"
+           stylesheets="@style.css">
+
+    <VBox alignment="CENTER" spacing="20" maxWidth="400" StackPane.alignment="CENTER"
+          style="-fx-padding: 30 40 20 40;" translateY="-100">
+
+        <!-- Logotipo -->
+        <ImageView fx:id="logoImage"
+                   fitWidth="300"
+                   preserveRatio="true"
+                   pickOnBounds="true"
+                   translateY="50">
+            <image>
+                <Image url="@icons/logo1.png"/>
+            </image>
+        </ImageView>
+
+        <!-- Título -->
+        <Label text="Criar Conta" styleClass="login-title"/>
+        <Label text="Preencha os dados para criar a sua conta de motorista." styleClass="login-subtitle"/>
+
+        <Label text="OU" styleClass="divider"/>
+
+        <VBox spacing="15" alignment="CENTER">
+            <TextField fx:id="nomeField" promptText="Nome completo" styleClass="login-field"/>
+            <TextField fx:id="emailField" promptText="E-mail" styleClass="login-field"/>
+            <PasswordField fx:id="passwordField" promptText="Password" styleClass="login-field"/>
+            <TextField fx:id="telefoneField" promptText="Telefone" styleClass="login-field"/>
+            <TextField fx:id="cartaConducaoField" promptText="Carta de condução" styleClass="login-field"/>
+            <DatePicker fx:id="dataNascimentoField" promptText="Data de nascimento" styleClass="date-picker"/>
+
+            <Button text="Criar Conta" onAction="#handleRegister" styleClass="login-button"/>
+        </VBox>
+
+        <HBox alignment="CENTER">
+            <Label text="Já tem conta?" />
+            <Hyperlink text="Fazer login" onAction="#voltarParaLogin" styleClass="signup-link"/>
+        </HBox>
+    </VBox>
+</StackPane> 

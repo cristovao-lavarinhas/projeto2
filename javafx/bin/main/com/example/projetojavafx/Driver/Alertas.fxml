@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Pos?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.projetojavafx.Controller.Driver.AlertasController"
+      spacing="20" styleClass="page-container">
+
+    <!-- Cabeçalho -->
+    <HBox alignment="CENTER_LEFT" spacing="20" styleClass="page-header">
+        <Label text="🔔 Configurar Alertas" styleClass="page-title"/>
+        <Pane HBox.hgrow="ALWAYS"/>
+        <Button text="Salvar Configurações" onAction="#salvarConfiguracoes" styleClass="action-button"/>
+    </HBox>
+
+    <!-- Alertas Ativos -->
+    <VBox styleClass="active-alerts">
+        <Label text="Alertas Ativos" styleClass="section-title"/>
+        
+        <VBox fx:id="alertasAtivosContainer" spacing="10" styleClass="alerts-list">
+            <!-- Alertas serão carregados dinamicamente -->
+        </VBox>
+    </VBox>
+
+    <!-- Configurações de Notificações -->
+    <VBox styleClass="notification-settings">
+        <Label text="Configurações de Notificações" styleClass="section-title"/>
+        
+        <HBox spacing="20" styleClass="settings-row">
+            <VBox styleClass="notification-category">
+                <Label text="Viagens" styleClass="category-title"/>
+                <VBox spacing="8">
+                    <CheckBox fx:id="notifNovaViagem" text="Nova viagem disponível" selected="true" styleClass="notification-checkbox"/>
+                    <CheckBox fx:id="notifViagemAceite" text="Viagem aceite pelo cliente" selected="true" styleClass="notification-checkbox"/>
+                    <CheckBox fx:id="notifViagemCancelada" text="Viagem cancelada" selected="true" styleClass="notification-checkbox"/>
+                    <CheckBox fx:id="notifLembreteViagem" text="Lembrete de viagem" selected="true" styleClass="notification-checkbox"/>
+                </VBox>
+            </VBox>
+            
+            <VBox styleClass="notification-category">
+                <Label text="Pagamentos" styleClass="category-title"/>
+                <VBox spacing="8">
+                    <CheckBox fx:id="notifPagamentoRecebido" text="Pagamento recebido" selected="true" styleClass="notification-checkbox"/>
+                    <CheckBox fx:id="notifPagamentoPendente" text="Pagamento pendente" selected="true" styleClass="notification-checkbox"/>
+                    <CheckBox fx:id="notifBonusDisponivel" text="Bônus disponível" selected="true" styleClass="notification-checkbox"/>
+                </VBox>
+            </VBox>
+            
+            <VBox styleClass="notification-category">
+                <Label text="Documentos" styleClass="category-title"/>
+                <VBox spacing="8">
+                    <CheckBox fx:id="notifDocumentoVencendo" text="Documento a vencer" selected="true" styleClass="notification-checkbox"/>
+                    <CheckBox fx:id="notifDocumentoVencido" text="Documento vencido" selected="true" styleClass="notification-checkbox"/>
+                    <CheckBox fx:id="notifManutencaoViatura" text="Manutenção da viatura" selected="true" styleClass="notification-checkbox"/>
+                </VBox>
+            </VBox>
+        </HBox>
+        
+        <HBox spacing="20" styleClass="settings-row">
+            <VBox styleClass="notification-category">
+                <Label text="Avaliações" styleClass="category-title"/>
+                <VBox spacing="8">
+                    <CheckBox fx:id="notifNovaAvaliacao" text="Nova avaliação recebida" selected="true" styleClass="notification-checkbox"/>
+                    <CheckBox fx:id="notifAvaliacaoBaixa" text="Avaliação baixa" selected="true" styleClass="notification-checkbox"/>
+                </VBox>
+            </VBox>
+            
+            <VBox styleClass="notification-category">
+                <Label text="Suporte" styleClass="category-title"/>
+                <VBox spacing="8">
+                    <CheckBox fx:id="notifMensagemSuporte" text="Nova mensagem do suporte" selected="true" styleClass="notification-checkbox"/>
+                    <CheckBox fx:id="notifTicketResolvido" text="Ticket resolvido" selected="true" styleClass="notification-checkbox"/>
+                </VBox>
+            </VBox>
+            
+            <VBox styleClass="notification-category">
+                <Label text="Sistema" styleClass="category-title"/>
+                <VBox spacing="8">
+                    <CheckBox fx:id="notifManutencaoSistema" text="Manutenção do sistema" selected="true" styleClass="notification-checkbox"/>
+                    <CheckBox fx:id="notifAtualizacaoApp" text="Atualização disponível" selected="true" styleClass="notification-checkbox"/>
+                </VBox>
+            </VBox>
+        </HBox>
+    </VBox>
+
+    <!-- Configurações de Som e Vibração -->
+    <VBox styleClass="sound-settings">
+        <Label text="Configurações de Som e Vibração" styleClass="section-title"/>
+        
+        <HBox spacing="30" styleClass="sound-controls">
+            <VBox styleClass="sound-option">
+                <Label text="Som de Notificação" styleClass="sound-label"/>
+                <ComboBox fx:id="somNotificacao" styleClass="sound-combo"/>
+            </VBox>
+            
+            <VBox styleClass="sound-option">
+                <Label text="Volume" styleClass="sound-label"/>
+                <Slider fx:id="volumeSlider" min="0" max="100" value="50" styleClass="volume-slider"/>
+                <Label fx:id="volumeLabel" text="50%" styleClass="volume-label"/>
+            </VBox>
+            
+            <VBox styleClass="sound-option">
+                <Label text="Vibração" styleClass="sound-label"/>
+                <CheckBox fx:id="vibracaoCheckbox" text="Ativar vibração" selected="true" styleClass="vibration-checkbox"/>
+            </VBox>
+        </HBox>
+    </VBox>
+
+    <!-- Horários de Silêncio -->
+    <VBox styleClass="quiet-hours">
+        <Label text="Horários de Silêncio" styleClass="section-title"/>
+        
+        <HBox spacing="20" styleClass="quiet-controls">
+            <VBox styleClass="quiet-option">
+                <Label text="Ativar Horários de Silêncio" styleClass="quiet-label"/>
+                <CheckBox fx:id="horariosSilencioCheckbox" text="Não perturbar" styleClass="quiet-checkbox"/>
+            </VBox>
+            
+            <VBox styleClass="quiet-option">
+                <Label text="Hora de Início" styleClass="quiet-label"/>
+                <ComboBox fx:id="horaSilencioInicio" styleClass="quiet-combo"/>
+            </VBox>
+            
+            <VBox styleClass="quiet-option">
+                <Label text="Hora de Fim" styleClass="quiet-label"/>
+                <ComboBox fx:id="horaSilencioFim" styleClass="quiet-combo"/>
+            </VBox>
+        </HBox>
+        
+        <Label text="Durante os horários de silêncio, apenas notificações urgentes serão exibidas" styleClass="quiet-info"/>
+    </VBox>
+
+    <!-- Histórico de Notificações -->
+    <VBox styleClass="notification-history">
+        <Label text="Histórico de Notificações" styleClass="section-title"/>
+        
+        <HBox alignment="CENTER_LEFT" spacing="10">
+            <Button text="Limpar Histórico" onAction="#limparHistorico" styleClass="clear-button"/>
+            <Label fx:id="contadorNotificacoes" text="0 notificações" styleClass="history-count"/>
+        </HBox>
+        
+        <TableView fx:id="tabelaHistorico" styleClass="history-table">
+            <columns>
+                <TableColumn text="Data/Hora" fx:id="colDataHora"/>
+                <TableColumn text="Tipo" fx:id="colTipo"/>
+                <TableColumn text="Mensagem" fx:id="colMensagem"/>
+                <TableColumn text="Status" fx:id="colStatus"/>
+                <TableColumn text="Ações" fx:id="colAcoes"/>
+            </columns>
+        </TableView>
+    </VBox>
+
+</VBox> 

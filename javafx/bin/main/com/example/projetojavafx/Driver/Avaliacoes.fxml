@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Pos?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.projetojavafx.Controller.Driver.AvaliacoesController"
+      spacing="20" styleClass="page-container">
+
+    <!-- Cabeçalho -->
+    <HBox alignment="CENTER_LEFT" spacing="20" styleClass="page-header">
+        <Label text="⭐ Avaliações dos Clientes" styleClass="page-title"/>
+        <Pane HBox.hgrow="ALWAYS"/>
+        <ComboBox fx:id="filtroCombo" promptText="Filtrar por" styleClass="filter-combo"/>
+        <Button text="Responder Todas" onAction="#responderTodas" styleClass="action-button"/>
+    </HBox>
+
+    <!-- Resumo das Avaliações -->
+    <HBox spacing="20" styleClass="rating-summary">
+        <VBox styleClass="rating-overview" alignment="CENTER">
+            <Label fx:id="avaliacaoGeral" text="4.8" styleClass="overall-rating"/>
+            <HBox spacing="2" alignment="CENTER">
+                <Label text="★★★★★" styleClass="stars"/>
+            </HBox>
+            <Label fx:id="totalAvaliacoes" text="Baseado em 156 avaliações" styleClass="rating-count"/>
+        </VBox>
+        
+        <VBox styleClass="rating-breakdown" spacing="10">
+            <Label text="Distribuição das Avaliações" styleClass="breakdown-title"/>
+            <VBox fx:id="distribuicaoContainer" spacing="5"/>
+        </VBox>
+        
+        <VBox styleClass="rating-stats" spacing="10">
+            <Label text="Estatísticas" styleClass="stats-title"/>
+            <HBox spacing="20">
+                <VBox alignment="CENTER">
+                    <Label fx:id="avaliacoesPositivas" text="95%" styleClass="stat-value-positive"/>
+                    <Label text="Positivas" styleClass="stat-label"/>
+                </VBox>
+                <VBox alignment="CENTER">
+                    <Label fx:id="avaliacoesNeutras" text="3%" styleClass="stat-value-neutral"/>
+                    <Label text="Neutras" styleClass="stat-label"/>
+                </VBox>
+                <VBox alignment="CENTER">
+                    <Label fx:id="avaliacoesNegativas" text="2%" styleClass="stat-value-negative"/>
+                    <Label text="Negativas" styleClass="stat-label"/>
+                </VBox>
+            </HBox>
+        </VBox>
+    </HBox>
+
+    <!-- Lista de Avaliações -->
+    <VBox styleClass="reviews-container">
+        <HBox alignment="CENTER_LEFT" spacing="10">
+            <Label text="Avaliações Recentes" styleClass="section-title"/>
+            <Label fx:id="contadorAvaliacoes" text="(0 avaliações)" styleClass="review-count"/>
+        </HBox>
+        
+        <ScrollPane fitToWidth="true" styleClass="reviews-scroll">
+            <VBox fx:id="listaAvaliacoes" spacing="15"/>
+        </ScrollPane>
+    </VBox>
+
+    <!-- Paginação -->
+    <HBox alignment="CENTER" spacing="10" styleClass="pagination-container">
+        <Button text="Anterior" onAction="#paginaAnterior" styleClass="pagination-button"/>
+        <Label fx:id="paginaAtual" text="Página 1 de 1" styleClass="page-info"/>
+        <Button text="Próxima" onAction="#paginaProxima" styleClass="pagination-button"/>
+    </HBox>
+
+</VBox> 

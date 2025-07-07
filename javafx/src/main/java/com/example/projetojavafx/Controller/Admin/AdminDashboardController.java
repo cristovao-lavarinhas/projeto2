@@ -1,5 +1,7 @@
 package com.example.projetojavafx.Controller.Admin;
 
+import java.io.IOException;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -13,9 +15,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-
-import java.io.IOException;
-import java.util.Objects;
+import javafx.stage.Stage;
 
 public class AdminDashboardController {
 
@@ -129,8 +129,19 @@ public class AdminDashboardController {
     @FXML private void suporte() { loadPage("/com/example/projetojavafx/Admin/Suporte.fxml"); }
 
     @FXML
-    private void handleLogout() throws IOException {
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/example/projetojavafx/Login.fxml")));
-        contentArea.getScene().setRoot(root);
+    private void handleLogout(javafx.event.ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/projetojavafx/Login.fxml"));
+        Parent root = loader.load();
+
+        Stage stage = new Stage();
+        stage.setTitle("Login");
+        stage.setScene(new javafx.scene.Scene(root));
+        stage.setResizable(false);
+        stage.centerOnScreen();
+        stage.show();
+
+        // Fechar a janela atual (dashboard admin)
+        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        currentStage.close();
     }
 }
