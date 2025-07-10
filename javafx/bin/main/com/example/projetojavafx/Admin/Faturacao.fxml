@@ -4,33 +4,28 @@
 <?import javafx.scene.control.*?>
 <?import javafx.geometry.Insets?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.projetojavafx.Controller.Admin.FaturacaoController">
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.projetojavafx.Controller.Admin.FaturacaoController" stylesheets="@../style.css">
 
-    <!-- Título -->
-    <Label text="Faturação dos Motoristas" styleClass="title-label" layoutX="20" layoutY="20"/>
+    <VBox spacing="20" alignment="TOP_LEFT" AnchorPane.topAnchor="20" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20" style="-fx-padding: 20; -fx-background-color: #f5f6fa;">
 
-    <!-- Filtro por Motorista -->
-    <HBox spacing="10" layoutX="20" layoutY="60">
-        <Label text="Filtrar por motorista:"/>
-        <ComboBox fx:id="motoristaCombo" promptText="Seleciona um motorista"/>
-    </HBox>
+        <Label text="Faturação dos Motoristas" styleClass="page-title"/>
 
-    <!-- Tabela de Faturas -->
-    <TableView fx:id="faturaTable" prefHeight="400" prefWidth="600" layoutX="20" layoutY="100">
-        <columns>
-            <TableColumn fx:id="dataColumn" text="Data" prefWidth="200"/>
-            <TableColumn fx:id="valorColumn" text="Valor" prefWidth="150"/>
-            <TableColumn fx:id="descricaoColumn" text="Descrição" prefWidth="250"/>
-        </columns>
-    </TableView>
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <Label text="Filtrar por motorista:"/>
+            <ComboBox fx:id="motoristaCombo" promptText="Seleciona um motorista"/>
+        </HBox>
 
-    <!-- Total Faturado -->
-    <HBox spacing="10" layoutX="20" layoutY="520">
-        <Label text="Total Faturado:"/>
-        <Label fx:id="totalLabel" text="0.00€" />
-    </HBox>
+        <TableView fx:id="faturaTable" prefHeight="400" styleClass="modern-table">
+            <columns>
+                <TableColumn fx:id="dataColumn" text="Data" prefWidth="200"/>
+                <TableColumn fx:id="valorColumn" text="Valor" prefWidth="150"/>
+                <TableColumn fx:id="descricaoColumn" text="Descrição" prefWidth="650"/>
+            </columns>
+        </TableView>
 
-    <!-- Botão para Adicionar Nova Fatura -->
-    <Button text="Nova Fatura" onAction="#onNovaFatura" layoutX="20" layoutY="560"/>
-
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <Label text="Total Faturado:"/>
+            <Label fx:id="totalLabel" text="0.00€" />
+        </HBox>
+    </VBox>
 </AnchorPane>

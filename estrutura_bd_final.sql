@@ -19,9 +19,12 @@ CREATE TABLE utilizador (
 -- Tabela: Motorista
 CREATE TABLE motorista (
     id SERIAL PRIMARY KEY,
-    utilizador_id INT UNIQUE REFERENCES utilizador(id),
-    licenca VARCHAR(50),
-    estado VARCHAR(50)
+    nome VARCHAR(100) NOT NULL,
+    tel VARCHAR(15) NOT NULL,
+    cartaConducao VARCHAR(20) NOT NULL,
+    estado VARCHAR(20),
+    dtNascimento DATE NOT NULL,
+    idAvaliacao INT REFERENCES avaliacao(id),
 );
 
 -- Tabela: Cliente

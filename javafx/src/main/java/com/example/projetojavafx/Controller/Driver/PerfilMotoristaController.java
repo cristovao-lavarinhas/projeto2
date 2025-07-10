@@ -1,9 +1,17 @@
 package com.example.projetojavafx.Controller.Driver;
 
+import com.example.projetojavafx.Controller.SessaoUtilizador;
+import com.example.projetojavafx.Modelo.Motorista;
+import com.example.projetojavafx.Service.ApiClient;
+
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import javafx.stage.FileChooser;
-import java.io.File;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 
 public class PerfilMotoristaController {
@@ -19,27 +27,63 @@ public class PerfilMotoristaController {
     @FXML private Label ultimoLoginLabel;
     @FXML private Button alterarPasswordButton;
 
+    private Long motoristaId;
+    private Motorista motoristaAtual;
+
     @FXML
     public void initialize() {
         feedbackLabel.setVisible(false);
-        // Mock de dados
-        nomeField.setText("João Silva");
-        emailField.setText("joao.silva@email.com");
-        telefoneField.setText("912345678");
-        moradaField.setText("Rua das Flores, 123, Lisboa");
-        licencaField.setText("MTR-2024-001");
-        ibanField.setText("PT50000201231234567890154");
-        licencaField.setEditable(false);
+        motoristaId = SessaoUtilizador.getMotoristaId();
+        if (motoristaId != null) {
+            ApiClient.get("/motoristas/" + motoristaId, Motorista.class)
+                .thenAccept(motorista -> {
+                    if (motorista != null) {
+                        motoristaAtual = motorista;
+                        javafx.application.Platform.runLater(() -> preencherCampos(motorista));
+                    }
+                });
+        }
         guardarButton.setOnAction(e -> guardarPerfil());
-        estadoLabel.setText("Ativo");
-        ultimoLoginLabel.setText("2024-06-10 14:32");
-        estadoLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #219653;");
         alterarPasswordButton.setOnAction(e -> mostrarDialogoAlterarPassword());
     }
 
+    private void preencherCampos(Motorista motorista) {
+        nomeField.setText(motorista.getNome());
+        emailField.setText(motorista.getEmail());
+        telefoneField.setText(motorista.getTelefone());
+        moradaField.setText(motorista.getMorada());
+        licencaField.setText(motorista.getLicenca());
+        ibanField.setText(motorista.getIban());
+        estadoLabel.setText(motorista.getEstado());
+    }
+
     private void guardarPerfil() {
-        // Aqui podes guardar os dados no backend
-        mostrarFeedback("Perfil guardado com sucesso! (mock)", true);
+        if (motoristaAtual == null) return;
+        motoristaAtual.setNome(nomeField.getText());
+        motoristaAtual.setEmail(emailField.getText());
+        motoristaAtual.setTelefone(telefoneField.getText());
+        motoristaAtual.setMorada(moradaField.getText());
+        motoristaAtual.setLicenca(licencaField.getText());
+        motoristaAtual.setIban(ibanField.getText());
+        motoristaAtual.setEstado(estadoLabel.getText());
+        ApiClient.put("/motoristas/" + motoristaAtual.getId(), motoristaAtual, Motorista.class)
+            .thenAccept(resp -> {
+                if (resp != null) {
+                    javafx.application.Platform.runLater(() -> {
+                        mostrarFeedback("Perfil guardado com sucesso!", true);
+                        // Refresh dos dados reais
+                        ApiClient.get("/motoristas/" + motoristaAtual.getId(), Motorista.class)
+                            .thenAccept(motorista -> {
+                                if (motorista != null) {
+                                    motoristaAtual = motorista;
+                                    javafx.application.Platform.runLater(() -> preencherCampos(motorista));
+                                }
+                            });
+                    });
+                } else {
+                    javafx.application.Platform.runLater(() -> mostrarFeedback("Erro ao guardar alterações.", false));
+                }
+            });
     }
 
     private void mostrarFeedback(String mensagem, boolean sucesso) {
@@ -72,7 +116,14 @@ public class PerfilMotoristaController {
         });
         dialog.showAndWait().ifPresent(pass -> {
             if (!novaPass.getText().isEmpty() && novaPass.getText().equals(confirmarPass.getText())) {
-                mostrarFeedback("Palavra-passe alterada com sucesso! (mock)", true);
+                // Chamar endpoint para alterar password
+                java.util.Map<String, String> payload = new java.util.HashMap<>();
+                payload.put("idMotorista", String.valueOf(motoristaId));
+                payload.put("novaPassword", novaPass.getText());
+                ApiClient.postText("/usuarios/alterar-password", payload)
+                    .thenAccept(resp -> {
+                        javafx.application.Platform.runLater(() -> mostrarFeedback("Palavra-passe alterada com sucesso!", true));
+                    });
             } else {
                 mostrarFeedback("As palavras-passe não coincidem!", false);
             }

@@ -1,16 +1,19 @@
 package com.example.projetojavafx.Controller.Admin;
 
-import com.example.projetojavafx.Modelo.Motorista;
 import com.example.projetojavafx.Modelo.PedidoInscricao;
-import com.example.projetojavafx.Service.MotoristaService;
-import javafx.fxml.FXML;
-import javafx.geometry.Pos;
-import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
+import com.example.projetojavafx.Service.ApiClient;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.util.Callback;
+import javafx.fxml.FXML;
+import javafx.geometry.Pos;
+import javafx.scene.control.Button;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
+import javafx.util.Callback;
 
 public class PedidosInscricaoController {
 
@@ -38,17 +41,20 @@ public class PedidosInscricaoController {
     private void initialize() {
         nomeColumn.setCellValueFactory(new PropertyValueFactory<>("nome"));
         emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
-        telefoneColumn.setCellValueFactory(new PropertyValueFactory<>("telefone"));
+        telefoneColumn.setCellValueFactory(new PropertyValueFactory<>("tel")); // ou "telefone"
         estadoColumn.setCellValueFactory(new PropertyValueFactory<>("estado"));
 
-        pedidosList = FXCollections.observableArrayList(
-                new PedidoInscricao("João Silva", "joao@gmail.com", "912345678", "Pendente"),
-                new PedidoInscricao("Ana Costa", "ana@gmail.com", "934567890", "Pendente")
-        );
-
-        pedidosTable.setItems(pedidosList);
-
+        carregarPedidosReais();
         addAcoes();
+    }
+
+    private void carregarPedidosReais() {
+        ApiClient.getList("/auth/admin/pedidos-inscricao", PedidoInscricao.class)
+            .thenAccept(pedidos -> {
+                if (pedidos != null) {
+                    javafx.application.Platform.runLater(() -> pedidosTable.setItems(FXCollections.observableArrayList(pedidos)));
+                }
+            });
     }
 
     private void addAcoes() {
@@ -62,24 +68,26 @@ public class PedidosInscricaoController {
 
                 approveBtn.setOnAction(event -> {
                     PedidoInscricao pedido = getTableView().getItems().get(getIndex());
-                    pedido.setEstado("Aprovado");
-                    pedidosTable.refresh();
-
-                    // Criar Motorista a partir do pedido
-                    Motorista motorista = new Motorista(
-                            pedido.getNome(),
-                            pedido.getTelefone(),
-                            "Licenca-" + pedido.getTelefone().substring(4), // Geração simples de licença
-                            "Ativo"
-                    );
-
-                    MotoristaService.adicionarMotorista(motorista);
+                    java.util.Map<String, Object> payload = new java.util.HashMap<>();
+                    payload.put("idMotorista", pedido.getId());
+                    payload.put("estado", "APROVADO");
+                    ApiClient.postText("/auth/admin/validar-inscricao", payload)
+                        .thenAccept(resp -> {
+                            pedido.setEstado("APROVADO");
+                            javafx.application.Platform.runLater(() -> pedidosTable.refresh());
+                        });
                 });
 
                 rejectBtn.setOnAction(event -> {
                     PedidoInscricao pedido = getTableView().getItems().get(getIndex());
-                    pedido.setEstado("Rejeitado");
-                    pedidosTable.refresh();
+                    java.util.Map<String, Object> payload = new java.util.HashMap<>();
+                    payload.put("idMotorista", pedido.getId());
+                    payload.put("estado", "REJEITADO");
+                    ApiClient.postText("/auth/admin/validar-inscricao", payload)
+                        .thenAccept(resp -> {
+                            pedido.setEstado("REJEITADO");
+                            javafx.application.Platform.runLater(() -> pedidosTable.refresh());
+                        });
                 });
             }
 

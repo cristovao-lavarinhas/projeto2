@@ -9,6 +9,7 @@ public class Viatura {
     private String cor;
     private boolean seguroAtivo;
     private Viatura viaturaAssociada;
+    private String motoristaNome;
 
     public Viatura(String marca, String modelo, String matricula, String ano, String cor, boolean seguroAtivo) {
         this.marca = marca;
@@ -26,6 +27,7 @@ public class Viatura {
     public String getAno() { return ano; }
     public String getCor() { return cor; }
     public boolean isSeguroAtivo() { return seguroAtivo; }
+    public String getMotoristaNome() { return motoristaNome; }
 
     // Setters
     public void setMarca(String marca) { this.marca = marca; }
@@ -34,4 +36,5 @@ public class Viatura {
     public void setAno(String ano) { this.ano = ano; }
     public void setCor(String cor) { this.cor = cor; }
     public void setSeguroAtivo(boolean seguroAtivo) { this.seguroAtivo = seguroAtivo; }
+    public void setMotoristaNome(String motoristaNome) { this.motoristaNome = motoristaNome; }
 }

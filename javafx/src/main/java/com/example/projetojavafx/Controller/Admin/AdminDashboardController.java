@@ -26,7 +26,23 @@ public class AdminDashboardController {
 
     @FXML
     public void initialize() {
-        greetingLabel.setText("Bem-vindo, Admin!");        mostrarResumoDashboard();
+        greetingLabel.setText("Bem-vindo, Admin!");
+        configurarLogo();
+        mostrarResumoDashboard();
+    }
+
+    private void configurarLogo() {
+        try {
+            javafx.scene.image.Image logo = new javafx.scene.image.Image(getClass().getResourceAsStream("/com/example/projetojavafx/icons/icon.png"));
+            logoImageView.setImage(logo);
+            logoImageView.setFitHeight(38);
+            logoImageView.setFitWidth(80);
+            logoImageView.setPreserveRatio(true);
+            logoImageView.setStyle("-fx-cursor: hand; -fx-padding: 0 16 0 8;");
+            logoImageView.setOnMouseClicked(e -> mostrarResumoDashboard());
+        } catch (Exception e) {
+            System.err.println("Erro ao carregar o logo: " + e.getMessage());
+        }
     }
 
     private void loadPage(String fxmlPath) {
@@ -51,22 +67,17 @@ public class AdminDashboardController {
         cards.setAlignment(Pos.CENTER);
 
         cards.getChildren().addAll(
-                criarCard("Motoristas Ativos", "128"),
-                criarCard("Viaturas Registadas", "56"),
-                criarCard("Pedidos Pendentes", "7"),
-                criarCard("Viagens Concluídas", "342")
+                criarCard("Motoristas Ativos", ""),
+                criarCard("Viaturas Registadas", ""),
+                criarCard("Pedidos Pendentes", ""),
+                criarCard("Viagens Concluídas", "")
         );
 
         Label ultimasLabel = new Label("Últimas Atividades");
         ultimasLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
 
         ListView<String> atividades = new ListView<>();
-        atividades.getItems().addAll(
-                "✔ Motorista João aprovado",
-                "✔ Viatura 32-AZ-87 registada",
-                "✏ Documento atualizado por Maria",
-                "📤 Pedido de inscrição de Carla recebido"
-        );
+        // Nenhuma atividade por default
         atividades.setMaxHeight(150);
 
         resumoBox.getChildren().addAll(titulo, cards, ultimasLabel, atividades);
@@ -109,13 +120,21 @@ public class AdminDashboardController {
         return card;
     }
 
+    @FXML
+    private void showNotifications() {
+        // Simples: mostra um alerta informativo
+        javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.INFORMATION);
+        alert.setTitle("Notificações");
+        alert.setHeaderText(null);
+        alert.setContentText("Nenhuma notificação disponível.");
+        alert.showAndWait();
+    }
 
 
     // Botões
     @FXML private void listarMotorista() { loadPage("/com/example/projetojavafx/Admin/ListarMotoristas.fxml"); }
     @FXML private void pedidosInscricao() { loadPage("/com/example/projetojavafx/Admin/PedidosInscricao.fxml"); }
     @FXML private void estadoMotorista() { loadPage("/com/example/projetojavafx/Admin/EstadoMotorista.fxml"); }
-    @FXML private void atualizarDocs() { loadPage("/com/example/projetojavafx/Admin/AtualizarDocumentos.fxml"); }
     @FXML private void estado() { loadPage("/com/example/projetojavafx/Admin/VerificarEstado.fxml"); }
     @FXML private void registarViatura() { loadPage("/com/example/projetojavafx/Admin/RegistarViatura.fxml"); }
     @FXML private void listarViatura() { loadPage("/com/example/projetojavafx/Admin/ListarViatura.fxml"); }
@@ -124,7 +143,6 @@ public class AdminDashboardController {
     @FXML private void estadoViatura() { loadPage("/com/example/projetojavafx/Admin/EstadoViatura.fxml"); }
     @FXML private void historicoViagens() { loadPage("/com/example/projetojavafx/Admin/HistoricoViagens.fxml"); }
     @FXML private void faturacao() { loadPage("/com/example/projetojavafx/Admin/Faturacao.fxml"); }
-    @FXML private void controlarSaldo() { loadPage("/com/example/projetojavafx/Admin/ControlarSaldo.fxml"); }
     @FXML private void exportarRelatorios() { loadPage("/com/example/projetojavafx/Admin/ExportarRelatorios.fxml"); }
     @FXML private void suporte() { loadPage("/com/example/projetojavafx/Admin/Suporte.fxml"); }
 
@@ -136,7 +154,7 @@ public class AdminDashboardController {
         Stage stage = new Stage();
         stage.setTitle("Login");
         stage.setScene(new javafx.scene.Scene(root));
-        stage.setResizable(false);
+        stage.setMaximized(true);
         stage.centerOnScreen();
         stage.show();
 

@@ -63,4 +63,8 @@ public class UsuarioService {
         }
         return false;
     }
+
+    public Optional<Usuario> procurarPorMotoristaId(Long idMotorista) {
+        return usuarioRepository.findByMotorista_Id(idMotorista);
+    }
 } 

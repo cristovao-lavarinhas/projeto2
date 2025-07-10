@@ -1,17 +1,20 @@
 package com.example.projetojavafx.Controller.Admin;
 
-import com.example.projetojavafx.Modelo.Motorista;
-import com.example.projetojavafx.Service.MotoristaService;
-import javafx.fxml.FXML;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.Alert;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
+
+import com.example.projetojavafx.Modelo.Motorista;
+import com.example.projetojavafx.Service.MotoristaService;
+import com.example.projetojavafx.Service.ApiClient;
+
+import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 public class VerificarEstadoController {
 
@@ -28,6 +31,9 @@ public class VerificarEstadoController {
     private Label faltasLabel;
 
     @FXML
+    private Button notificarButton;
+
+    @FXML
     private void initialize() {
         motoristaComboBox.setItems(MotoristaService.listarMotoristas());
     }
@@ -42,6 +48,7 @@ public class VerificarEstadoController {
             alert.setHeaderText(null);
             alert.setContentText("Por favor selecione um motorista.");
             alert.showAndWait();
+            notificarButton.setDisable(true);
             return;
         }
 
@@ -56,6 +63,7 @@ public class VerificarEstadoController {
         if (licencaOK && seguroOK && docVeiculoOK) {
             documentosStatusLabel.setText("Estado dos Documentos: ✅ Todos os documentos entregues");
             faltasLabel.setText("");
+            notificarButton.setDisable(true);
         } else {
             documentosStatusLabel.setText("Estado dos Documentos: ❌ Documentos pendentes");
             StringBuilder faltas = new StringBuilder();
@@ -65,6 +73,7 @@ public class VerificarEstadoController {
             if (!docVeiculoOK) faltas.append("- Documento do Veículo\n");
 
             faltasLabel.setText("Faltam:\n" + faltas.toString());
+            notificarButton.setDisable(false);
         }
     }
 
@@ -114,5 +123,24 @@ public class VerificarEstadoController {
             alert.setContentText("Erro ao exportar relatório.");
             alert.showAndWait();
         }
+    }
+
+    @FXML
+    private void handleNotificar() {
+        Motorista motorista = motoristaComboBox.getValue();
+        if (motorista == null) return;
+        // Chamada ao backend para criar notificação
+        String endpoint = "/api/notificacoes/motorista/" + motorista.getId();
+        ApiClient.post(endpoint, "documentos em falta", String.class)
+            .thenAccept(result -> {
+                javafx.application.Platform.runLater(() -> {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Notificação Enviada");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Notificação persistente enviada ao motorista '" + motorista.getNome() + "'.");
+                    alert.showAndWait();
+                    notificarButton.setDisable(true);
+                });
+            });
     }
 }

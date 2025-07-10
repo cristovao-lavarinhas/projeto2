@@ -11,48 +11,55 @@
            fx:controller="com.example.projetojavafx.Controller.LoginController"
            style="-fx-background-color: white;"
            stylesheets="@style.css">
-
     <VBox alignment="CENTER" spacing="20" maxWidth="400" StackPane.alignment="CENTER"
-          style="-fx-padding: 30 40 20 40;" translateY="-150"> <!-- sobe 30px -->
-
-        <!-- Logotipo -->
-        <ImageView fx:id="logoImage"
-                   fitWidth="400"
-                   preserveRatio="true"
-                   pickOnBounds="true"
-                    translateY="100">
+          style="-fx-padding: 30 40 20 40;" translateY="-100">
+        <!-- Logotipo no topo -->
+        <ImageView fx:id="logoImage" fitWidth="300" preserveRatio="true" pickOnBounds="true" translateY="150">
             <image>
                 <Image url="@icons/logo1.png"/>
             </image>
         </ImageView>
-
         <!-- Título -->
-        <Label text="Bem-vindo de volta" styleClass="login-title"/>
-        <Label text="Faça login para continuar a sua jornada com os nossos serviços." styleClass="login-subtitle"/>
-
-        <HBox spacing="10" alignment="CENTER">
-            <Button text=" Google" graphicTextGap="5" styleClass="google-button"/>
-            <Button text=" Facebook" graphicTextGap="5" styleClass="facebook-button"/>
-        </HBox>
-
-        <Label text="OU" styleClass="divider"/>
-
-        <VBox spacing="10" alignment="CENTER">
-            <TextField fx:id="emailField" promptText="E-mail" styleClass="login-field"/>
-            <PasswordField fx:id="passwordField" promptText="Password" styleClass="login-field"/>
-
-            <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-padding: 5 0 5 0;">
-                <CheckBox fx:id="rememberMeCheckBox" text="Lembrar-me"/>
-                <Pane HBox.hgrow="ALWAYS"/>
-                <Hyperlink text="Esqueceu a senha?" styleClass="forgot-password"/>
-            </HBox>
-
-            <Button text="Entrar" onAction="#handleLogin" styleClass="login-button"/>
-        </VBox>
-
-        <HBox alignment="CENTER">
-            <Label text="Não tem conta?" />
-            <Hyperlink text="Criar conta" onAction="#abrirJanelaRegisto" styleClass="signup-link"/>
-        </HBox>
+        <Label text="Bem-vindo de volta" styleClass="login-title" fx:id="loginTitleLabel" style="-fx-padding: 40 0 0 0;"/>
+        <Label text="Faça login para continuar a sua jornada com os nossos serviços." styleClass="login-subtitle" fx:id="loginSubtitleLabel" style="-fx-padding: 10 0 0 0;"/>
+        <!-- Etapas -->
+        <StackPane fx:id="stepsPane" maxWidth="400">
+            <!-- Etapa 1: Login -->
+            <VBox fx:id="loginBox" alignment="CENTER" spacing="15" maxWidth="400">
+                <TextField fx:id="emailField" promptText="E-mail" styleClass="login-field"/>
+                <PasswordField fx:id="passwordField" promptText="Password" styleClass="login-field"/>
+                <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-padding: 5 0 5 0;">
+                    <CheckBox fx:id="rememberMeCheckBox" text="Lembrar-me"/>
+                    <Pane HBox.hgrow="ALWAYS"/>
+                    <Hyperlink text="Esqueceu a senha?" styleClass="forgot-password" onAction="#showRecoveryStep"/>
+                </HBox>
+                <Button text="Entrar" onAction="#handleLogin" styleClass="login-button"/>
+                <HBox alignment="CENTER">
+                    <Label text="Não tem conta?" />
+                    <Hyperlink text="Criar conta" onAction="#abrirJanelaRegisto" styleClass="signup-link"/>
+                </HBox>
+            </VBox>
+            <!-- Etapa 2: 2FA -->
+            <VBox fx:id="twofaBox" alignment="CENTER" spacing="15" maxWidth="400" visible="false" opacity="0">
+                <Label text="Autenticação 2FA" styleClass="login-title"/>
+                <Label text="Insira o código enviado para o seu email." styleClass="login-subtitle"/>
+                <TextField fx:id="twofaCodeField" promptText="Código 2FA" styleClass="login-field"/>
+                <Button text="Validar Código" onAction="#handle2FA" styleClass="login-button"/>
+                <Hyperlink text="Reenviar código" onAction="#resend2FA" styleClass="forgot-password"/>
+                <Hyperlink text="Voltar ao login" onAction="#showLoginStep" styleClass="signup-link"/>
+            </VBox>
+            <!-- Etapa 3: Recuperação de password -->
+            <VBox fx:id="recoveryBox" alignment="CENTER" spacing="15" maxWidth="400" visible="false" opacity="0">
+                <Label text="Recuperação de Password" styleClass="login-title"/>
+                <Label text="Insira o seu email para receber um código de recuperação." styleClass="login-subtitle"/>
+                <TextField fx:id="recoveryEmailField" promptText="E-mail" styleClass="login-field"/>
+                <Button text="Enviar código" onAction="#handleRecoveryRequest" styleClass="login-button"/>
+                <Label fx:id="recoveryStep2Label" text="" styleClass="login-subtitle" visible="false"/>
+                <TextField fx:id="recoveryCodeField" promptText="Código de recuperação" styleClass="login-field" visible="false"/>
+                <PasswordField fx:id="newPasswordField" promptText="Nova password" styleClass="login-field" visible="false"/>
+                <Button fx:id="alterarPasswordButton" text="Alterar password" onAction="#handleResetPassword" styleClass="login-button" visible="false"/>
+                <Hyperlink text="Voltar ao login" onAction="#showLoginStep" styleClass="signup-link" style="-fx-padding: 40 0 0 0;"/>
+            </VBox>
+        </StackPane>
     </VBox>
 </StackPane>

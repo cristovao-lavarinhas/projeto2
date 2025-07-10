@@ -18,6 +18,7 @@
                 <TableColumn fx:id="anoColumn" text="Ano" prefWidth="100"/>
                 <TableColumn fx:id="corColumn" text="Cor" prefWidth="100"/>
                 <TableColumn fx:id="seguroColumn" text="Seguro Ativo" prefWidth="150"/>
+                <TableColumn fx:id="motoristaColumn" text="Motorista" prefWidth="180"/>
                 <TableColumn fx:id="editColumn" text="Editar" prefWidth="100"/>
                 <TableColumn fx:id="deleteColumn" text="Eliminar" prefWidth="100"/>
             </columns>

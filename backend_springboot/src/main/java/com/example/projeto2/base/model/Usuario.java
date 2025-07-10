@@ -21,6 +21,9 @@ public class Usuario {
     @Column(name = "tipo", nullable = false, length = 20)
     private String tipo; // "ADMIN", "MOTORISTA", "CLIENTE"
 
+    @Column(name = "nome", length = 100)
+    private String nome;
+
     @ManyToOne
     @JoinColumn(name = "idMotorista", nullable = true)
     private Motorista motorista;
@@ -48,6 +51,9 @@ public class Usuario {
 
     public String getTipo() { return tipo; }
     public void setTipo(String tipo) { this.tipo = tipo; }
+
+    public String getNome() { return nome; }
+    public void setNome(String nome) { this.nome = nome; }
 
     public Motorista getMotorista() { return motorista; }
     public void setMotorista(Motorista motorista) { this.motorista = motorista; }

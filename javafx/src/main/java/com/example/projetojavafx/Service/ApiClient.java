@@ -135,4 +135,26 @@ public class ApiClient {
             return false;
         });
     }
+
+    // POST que devolve texto (para endpoints que devolvem apenas String)
+    public static CompletableFuture<String> postText(String endpoint, Object object) {
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                String json = objectMapper.writeValueAsString(object);
+                RequestBody body = RequestBody.create(json, MediaType.get("application/json"));
+                Request request = new Request.Builder()
+                        .url(BASE_URL + endpoint)
+                        .post(body)
+                        .build();
+                try (Response response = client.newCall(request).execute()) {
+                    if (response.body() != null) {
+                        return response.body().string();
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        });
+    }
 } 

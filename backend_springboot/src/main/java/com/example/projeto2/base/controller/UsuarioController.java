@@ -132,4 +132,23 @@ public class UsuarioController {
             return ResponseEntity.status(500).body("Erro ao buscar usuário: " + e.getMessage());
         }
     }
+
+    @PostMapping("/alterar-password")
+    public ResponseEntity<?> alterarPassword(@RequestBody Map<String, String> req) {
+        try {
+            Long idMotorista = Long.valueOf(req.get("idMotorista"));
+            String novaPassword = req.get("novaPassword");
+            Optional<Usuario> usuarioOpt = usuarioService.procurarPorMotoristaId(idMotorista);
+            if (usuarioOpt.isPresent()) {
+                Usuario usuario = usuarioOpt.get();
+                usuario.setPassword(novaPassword); // (podes encriptar se quiseres)
+                usuarioService.guardar(usuario);
+                return ResponseEntity.ok("Password alterada com sucesso");
+            } else {
+                return ResponseEntity.badRequest().body("Utilizador não encontrado para o motorista");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Erro ao alterar password: " + e.getMessage());
+        }
+    }
 } 

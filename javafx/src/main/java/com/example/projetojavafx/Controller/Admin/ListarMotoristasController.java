@@ -3,19 +3,25 @@ package com.example.projetojavafx.Controller.Admin;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 import com.example.projetojavafx.Modelo.Motorista;
+import com.example.projetojavafx.Service.ApiClient;
 import com.example.projetojavafx.Service.MotoristaService;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.ChoiceBoxTableCell;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.layout.GridPane;
 import javafx.util.Callback;
 
 public class ListarMotoristasController {
@@ -51,36 +57,37 @@ public class ListarMotoristasController {
         licenseColumn.setCellValueFactory(new PropertyValueFactory<>("licenca"));
         statusColumn.setCellValueFactory(new PropertyValueFactory<>("estado"));
 
-        // Load motoristas from service (which connects to backend)
-        motoristas = MotoristaService.listarMotoristas();
-        driversTable.setItems(motoristas);
-        
-        // Load data from backend
-        MotoristaService.carregarMotoristasDoBackend();
+        // Carregar motoristas reais do backend
+        ApiClient.getList("/motoristas", Motorista.class)
+            .thenAccept(motoristas -> {
+                System.out.println("Recebido do backend: " + motoristas);
+                if (motoristas != null) {
+                    javafx.application.Platform.runLater(() -> {
+                        driversTable.setItems(FXCollections.observableArrayList(motoristas));
+                    });
+                }
+            });
 
-        driversTable.setEditable(true);
-
-        // Torna as colunas de texto editáveis
-        nameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-        phoneColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-        licenseColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-
-        // Torna a coluna "Estado" uma ChoiceBox editável
-        statusColumn.setCellFactory(ChoiceBoxTableCell.forTableColumn("Ativo", "Inativo"));
+        driversTable.setEditable(false);
+        // Remover cell factories editáveis
+        // nameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        // phoneColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        // licenseColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        // statusColumn.setCellFactory(ChoiceBoxTableCell.forTableColumn("Ativo", "Inativo"));
 
         // Atualiza o objeto Motorista ao editar
-        nameColumn.setOnEditCommit((TableColumn.CellEditEvent<Motorista, String> event) ->
-                event.getRowValue().setNome(event.getNewValue())
-        );
-        phoneColumn.setOnEditCommit((TableColumn.CellEditEvent<Motorista, String> event) ->
-                event.getRowValue().setTelefone(event.getNewValue())
-        );
-        licenseColumn.setOnEditCommit((TableColumn.CellEditEvent<Motorista, String> event) ->
-                event.getRowValue().setLicenca(event.getNewValue())
-        );
-        statusColumn.setOnEditCommit((TableColumn.CellEditEvent<Motorista, String> event) ->
-                event.getRowValue().setEstado(event.getNewValue())
-        );
+        // nameColumn.setOnEditCommit((TableColumn.CellEditEvent<Motorista, String> event) ->
+        //         event.getRowValue().setNome(event.getNewValue())
+        // );
+        // phoneColumn.setOnEditCommit((TableColumn.CellEditEvent<Motorista, String> event) ->
+        //         event.getRowValue().setTelefone(event.getNewValue())
+        // );
+        // licenseColumn.setOnEditCommit((TableColumn.CellEditEvent<Motorista, String> event) ->
+        //         event.getRowValue().setLicenca(event.getNewValue())
+        // );
+        // statusColumn.setOnEditCommit((TableColumn.CellEditEvent<Motorista, String> event) ->
+        //         event.getRowValue().setEstado(event.getNewValue())
+        // );
 
 
         // Adicionar botões de ação
@@ -147,13 +154,46 @@ public class ListarMotoristasController {
         MotoristaService.adicionarMotorista(novoMotorista);
     }
 
-    // Método editar (no futuro podes abrir popup para mais campos)
+    // Método editar (agora abre modal)
     private void abrirFormularioEditar(Motorista motorista) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Editar Motorista");
-        alert.setHeaderText(null);
-        alert.setContentText("Pode editar diretamente na tabela!");
-        alert.showAndWait();
+        Dialog<Motorista> dialog = new Dialog<>();
+        dialog.setTitle("Editar Motorista");
+        dialog.setHeaderText("Editar dados do motorista");
+
+        ButtonType gravarButtonType = new ButtonType("Gravar", ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().setAll(gravarButtonType, ButtonType.CANCEL);
+
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+
+        TextField nomeField = new TextField(motorista.getNome());
+        TextField telefoneField = new TextField(motorista.getTelefone());
+        TextField licencaField = new TextField(motorista.getLicenca());
+        ChoiceBox<String> estadoBox = new ChoiceBox<>();
+        estadoBox.getItems().addAll("Ativo", "Inativo");
+        estadoBox.setValue(motorista.getEstado());
+
+        grid.addRow(0, new Label("Nome:"), nomeField);
+        grid.addRow(1, new Label("Telefone:"), telefoneField);
+        grid.addRow(2, new Label("Licença:"), licencaField);
+        grid.addRow(3, new Label("Estado:"), estadoBox);
+
+        dialog.getDialogPane().setContent(grid);
+
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == gravarButtonType) {
+                motorista.setNome(nomeField.getText());
+                motorista.setTelefone(telefoneField.getText());
+                motorista.setLicenca(licencaField.getText());
+                motorista.setEstado(estadoBox.getValue());
+                driversTable.refresh();
+                return motorista;
+            }
+            return null;
+        });
+
+        dialog.showAndWait();
     }
 
     // Método eliminar com confirmação

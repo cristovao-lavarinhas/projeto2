@@ -1,13 +1,20 @@
 package com.example.projetojavafx.Modelo;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Motorista {
 
     private String nome;
     private String telefone;
+    @JsonProperty("cartaConducao")
     private String licenca;
     private String estado;
+    private String email;
+    private String morada;
+    private String iban;
     private DocumentoMotorista documentos = new DocumentoMotorista();
     private Viatura viaturaAssociada;
+    private Long id;
 
     public Motorista(String nome, String telefone, String licenca, String estado) {
         this.nome = nome;
@@ -33,8 +40,22 @@ public class Motorista {
         return estado;
     }
 
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+    public String getMorada() { return morada; }
+    public void setMorada(String morada) { this.morada = morada; }
+    public String getIban() { return iban; }
+    public void setIban(String iban) { this.iban = iban; }
+
     public Viatura getViatura() {
         return viaturaAssociada;
+    }
+
+    public Long getId() {
+        return id;
+    }
+    public void setId(Long id) {
+        this.id = id;
     }
 
     // Setters
@@ -60,5 +81,10 @@ public class Motorista {
 
     public void setViatura(Viatura viaturaAssociada) {
         this.viaturaAssociada = viaturaAssociada;
+    }
+
+    @Override
+    public String toString() {
+        return nome;
     }
 }

@@ -5,6 +5,9 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
@@ -14,6 +17,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.beans.property.SimpleStringProperty;
+import com.example.projetojavafx.Service.ApiClient;
 
 public class EstadoViaturaController {
     @FXML private Label lblMarcaModelo;
@@ -26,6 +30,7 @@ public class EstadoViaturaController {
     @FXML private TableColumn<Documento, String> colEstado;
     @FXML private TableColumn<Documento, Void> colAcao;
     @FXML private Button btnVerHistorico;
+    @FXML private VBox notificacoesBox;
 
     private final List<Documento> documentos = new ArrayList<>();
 
@@ -54,6 +59,7 @@ public class EstadoViaturaController {
         });
         addAcaoButtons();
         btnVerHistorico.setOnAction(e -> mostrarHistorico());
+        carregarNotificacoes();
     }
 
     private void mockViatura() {
@@ -136,6 +142,28 @@ public class EstadoViaturaController {
         alert.showAndWait();
     }
 
+    private void carregarNotificacoes() {
+        notificacoesBox.getChildren().clear();
+        Long motoristaId = 1L; // Substituir pelo id real do motorista autenticado
+        ApiClient.getList("/api/notificacoes/motorista/" + motoristaId, Notificacao.class)
+            .thenAccept(notificacoes -> {
+                if (notificacoes != null && !notificacoes.isEmpty()) {
+                    javafx.application.Platform.runLater(() -> {
+                        for (Notificacao n : notificacoes) {
+                            if (!n.lida && n.mensagem != null && !n.mensagem.isEmpty()) {
+                                HBox box = new HBox();
+                                box.setStyle("-fx-background-color: #fff3cd; -fx-padding: 8 12; -fx-background-radius: 8; -fx-border-color: #ffeeba; -fx-border-radius: 8;");
+                                Text txt = new Text("\u26A0 " + n.mensagem);
+                                txt.setStyle("-fx-fill: #856404; -fx-font-size: 13px;");
+                                box.getChildren().add(txt);
+                                notificacoesBox.getChildren().add(box);
+                            }
+                        }
+                    });
+                }
+            });
+    }
+
     // Classe Documento
     public static class Documento {
         private final SimpleStringProperty nome;
@@ -152,5 +180,12 @@ public class EstadoViaturaController {
         public SimpleStringProperty validadeProperty() { return validade; }
         public String getEstado() { return estado.get(); }
         public SimpleStringProperty estadoProperty() { return estado; }
+    }
+
+    // Classe para mapear notificações do backend
+    public static class Notificacao {
+        public Long id;
+        public String mensagem;
+        public boolean lida;
     }
 } 

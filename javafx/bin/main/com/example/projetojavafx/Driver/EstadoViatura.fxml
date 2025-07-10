@@ -22,6 +22,7 @@
                 <Region HBox.hgrow="ALWAYS" />
                 <Button fx:id="btnVerHistorico" text="Histórico de Submissões" />
             </HBox>
+            <VBox fx:id="notificacoesBox" spacing="8" />
             <TableView fx:id="tblDocumentos" VBox.vgrow="ALWAYS">
                 <columns>
                     <TableColumn fx:id="colNome" text="Documento" prefWidth="160" />

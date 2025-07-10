@@ -9,7 +9,6 @@
 
     <HBox alignment="CENTER_LEFT" spacing="10">
         <Label text="Lista de Motoristas" styleClass="title-label"/>
-        <Button text="Adicionar Motorista" onAction="#adicionarMotorista" styleClass="add-button"/>
     </HBox>
 
     <TableView fx:id="driversTable" VBox.vgrow="ALWAYS">

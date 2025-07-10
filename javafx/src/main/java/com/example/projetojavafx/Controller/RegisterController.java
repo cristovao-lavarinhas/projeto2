@@ -1,6 +1,5 @@
 package com.example.projetojavafx.Controller;
 
-import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -14,7 +13,6 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.DatePicker;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
@@ -40,19 +38,14 @@ public class RegisterController {
     private TextField cartaConducaoField;
 
     @FXML
-    private DatePicker dataNascimentoField;
-
-    @FXML
     private void handleRegister(ActionEvent event) {
         String nome = nomeField.getText();
         String email = emailField.getText();
         String password = passwordField.getText();
         String telefone = telefoneField.getText();
         String cartaConducao = cartaConducaoField.getText();
-        LocalDate dataNascimento = dataNascimentoField.getValue();
 
-        // Validação básica
-        if (nome.isEmpty() || email.isEmpty() || password.isEmpty() || telefone.isEmpty() || cartaConducao.isEmpty() || dataNascimento == null) {
+        if (nome.isEmpty() || email.isEmpty() || password.isEmpty() || telefone.isEmpty() || cartaConducao.isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erro de Registo");
             alert.setHeaderText("Campos obrigatórios");
@@ -61,48 +54,31 @@ public class RegisterController {
             return;
         }
 
-        // Criar mapa com os dados do registo
         Map<String, Object> registoData = new HashMap<>();
         registoData.put("nome", nome);
         registoData.put("email", email);
         registoData.put("password", password);
         registoData.put("telefone", telefone);
         registoData.put("cartaConducao", cartaConducao);
-        registoData.put("dataNascimento", dataNascimento.toString());
 
-        // Enviar para o backend usando o endpoint de registo
-        CompletableFuture<Map> future = ApiClient.post("/usuarios/registar", registoData, Map.class);
-        
-        future.thenAccept(result -> {
-            if (result != null && result.containsKey("message")) {
-                // Registo bem-sucedido
-                javafx.application.Platform.runLater(() -> {
+        CompletableFuture<String> future = ApiClient.postText("/auth/register-motorista", registoData);
+        future.thenAccept(response -> {
+            javafx.application.Platform.runLater(() -> {
+                if (response != null && response.contains("sucesso")) {
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Registo Bem-sucedido");
-                    alert.setHeaderText("Conta criada com sucesso!");
-                    alert.setContentText("O seu registo foi concluído. Pode agora fazer login.");
+                    alert.setHeaderText("Conta de motorista criada com sucesso!");
+                    alert.setContentText("O seu registo foi recebido e está em análise. Receberá uma notificação quando for aprovado.");
                     alert.showAndWait();
-                    
-                    // Voltar para a tela de login
                     voltarParaLogin(event);
-                });
-            } else {
-                // Erro no registo
-                final String errorMessage;
-                if (result != null && result.containsKey("error")) {
-                    errorMessage = (String) result.get("error");
                 } else {
-                    errorMessage = "Ocorreu um erro ao criar a conta. Tente novamente.";
-                }
-                
-                javafx.application.Platform.runLater(() -> {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Erro de Registo");
                     alert.setHeaderText("Falha no registo");
-                    alert.setContentText(errorMessage);
+                    alert.setContentText(response != null ? response : "Ocorreu um erro ao criar a conta. Tente novamente.");
                     alert.showAndWait();
-                });
-            }
+                }
+            });
         }).exceptionally(throwable -> {
             javafx.application.Platform.runLater(() -> {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -124,8 +100,8 @@ public class RegisterController {
             Stage stage = new Stage();
             stage.setTitle("Criar Conta");
             stage.setScene(new Scene(root));
-            stage.setResizable(false); // igual ao login
-            stage.centerOnScreen();    // centraliza
+            stage.setMaximized(true);
+            stage.centerOnScreen();
             stage.show();
 
             // Fechar a janela atual de login
@@ -146,8 +122,8 @@ public class RegisterController {
             Stage stage = new Stage();
             stage.setTitle("Login");
             stage.setScene(new Scene(root));
-            stage.setResizable(false); // igual ao login
-            stage.centerOnScreen();    // centraliza
+            stage.setMaximized(true);
+            stage.centerOnScreen();
             stage.show();
 
             // Fechar a janela atual de registo

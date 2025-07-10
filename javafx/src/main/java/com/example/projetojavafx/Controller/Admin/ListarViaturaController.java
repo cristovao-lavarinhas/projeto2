@@ -1,15 +1,22 @@
 package com.example.projetojavafx.Controller.Admin;
 
+import org.kordamp.ikonli.javafx.FontIcon;
+
 import com.example.projetojavafx.Modelo.Viatura;
-import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.control.cell.CheckBoxTableCell;
-import javafx.scene.control.cell.PropertyValueFactory;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.CheckBoxTableCell;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.util.Callback;
-import org.kordamp.ikonli.javafx.FontIcon;
 
 public class ListarViaturaController {
 
@@ -35,6 +42,9 @@ public class ListarViaturaController {
     private TableColumn<Viatura, Boolean> seguroColumn;
 
     @FXML
+    private TableColumn<Viatura, String> motoristaColumn;
+
+    @FXML
     private TableColumn<Viatura, Void> editColumn;
 
     @FXML
@@ -52,6 +62,7 @@ public class ListarViaturaController {
         anoColumn.setCellValueFactory(new PropertyValueFactory<>("ano"));
         corColumn.setCellValueFactory(new PropertyValueFactory<>("cor"));
         seguroColumn.setCellValueFactory(new PropertyValueFactory<>("seguroAtivo"));
+        motoristaColumn.setCellValueFactory(new PropertyValueFactory<>("motoristaNome"));
 
         // Tornar editáveis
         marcaColumn.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -64,6 +75,8 @@ public class ListarViaturaController {
         viaturasList = FXCollections.observableArrayList(
                 new Viatura("Opel", "Corsa", "00-AA-11", "2002", "Branco", false)
         );
+        // Exemplo: associar motorista
+        viaturasList.get(0).setMotoristaNome("João Silva");
 
         viaturasTable.setItems(viaturasList);
 

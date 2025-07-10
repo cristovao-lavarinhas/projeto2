@@ -20,8 +20,6 @@
                 <VBox styleClass="menu-section">
                     <Button text="Listar Motoristas" onAction="#listarMotorista" styleClass="menu-button"/>
                     <Button text="Pedidos de Inscrição" onAction="#pedidosInscricao" styleClass="menu-button"/>
-                    <Button text="Estado do Motorista" onAction="#estadoMotorista" styleClass="menu-button"/>
-                    <Button text="Atualizar documentos" onAction="#atualizarDocs" styleClass="menu-button"/>
                     <Button text="Verificar estado" onAction="#estado" styleClass="menu-button"/>
                 </VBox>
 
@@ -51,7 +49,6 @@
                 <Label text="Pagamentos" styleClass="menu-section-header"/>
                 <VBox styleClass="menu-section">
                     <Button text="Gerir faturação" onAction="#faturacao" styleClass="menu-button"/>
-                    <Button text="Controlar saldo pendente" onAction="#controlarSaldo" styleClass="menu-button"/>
                     <Button text="Exportar relatórios de pagamento" onAction="#exportarRelatorios" styleClass="menu-button"/>
                 </VBox>
 
@@ -70,13 +67,20 @@
     <!-- Topbar -->
     <top>
         <HBox spacing="20" alignment="CENTER_LEFT"
-              style="-fx-padding: 10; -fx-background-color: white;"
-              AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
+              style="-fx-padding: 10; -fx-background-color: white; -fx-border-bottom-width: 1; -fx-border-bottom-color: #ccc;">
+            <ImageView fx:id="logoImageView" fitHeight="38" fitWidth="60" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;"/>
             <Pane HBox.hgrow="ALWAYS"/>
-            <TextField fx:id="searchField" promptText="Search..." styleClass="search-bar"/>
-            <Label fx:id="greetingLabel" styleClass="user-greeting"/>
-            <Button text="Logout" onAction="#handleLogout" styleClass="logout-button"/>
 
+            <TextField fx:id="searchField" promptText="Buscar..." styleClass="search-bar"/>
+            <Label fx:id="greetingLabel" styleClass="user-greeting" text="Bem-vindo, Admin"/>
+
+            <!-- Botão de Notificações -->
+            <StackPane fx:id="notificationButtonPane">
+                <Button fx:id="notificationButton" styleClass="notification-button" onAction="#showNotifications" focusTraversable="false" text="🔔"/>
+                <Label fx:id="notificationBadge" text="0" styleClass="notification-badge" visible="false"/>
+            </StackPane>
+
+            <Button text="Logout" onAction="#handleLogout" styleClass="logout-button"/>
         </HBox>
     </top>
 

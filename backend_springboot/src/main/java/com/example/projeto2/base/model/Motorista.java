@@ -9,9 +9,9 @@ import java.util.Date;
 public class Motorista {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MotoristaIdGen")
-    @Column(name = "idMotorista", nullable = false)
-    private Long idMotorista;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
 
     @Column(name = "nome", nullable = false, length = 100)
     private String nome;
@@ -21,6 +21,18 @@ public class Motorista {
 
     @Column(name = "cartaConducao", nullable = false, length = 20)
     private String cartaConducao;
+
+    @Column(name = "estado", length = 20)
+    private String estado;
+
+    @Column(name = "email", length = 100)
+    private String email;
+
+    @Column(name = "morada", length = 200)
+    private String morada;
+
+    @Column(name = "iban", length = 34)
+    private String iban;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "dtNascimento", nullable = false)
@@ -40,8 +52,8 @@ public class Motorista {
         this.avaliacao = avaliacao;
     }
 
-    public Long getIdMotorista() { return idMotorista; }
-    public void setIdMotorista(Long idMotorista) { this.idMotorista = idMotorista; }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
     public String getNome() { return nome; }
     public void setNome(String nome) { this.nome = nome; }
@@ -52,6 +64,18 @@ public class Motorista {
     public String getCartaConducao() { return cartaConducao; }
     public void setCartaConducao(String cartaConducao) { this.cartaConducao = cartaConducao; }
 
+    public String getEstado() { return estado; }
+    public void setEstado(String estado) { this.estado = estado; }
+
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+
+    public String getMorada() { return morada; }
+    public void setMorada(String morada) { this.morada = morada; }
+
+    public String getIban() { return iban; }
+    public void setIban(String iban) { this.iban = iban; }
+
     public Date getDtNascimento() { return dtNascimento; }
     public void setDtNascimento(Date dtNascimento) { this.dtNascimento = dtNascimento; }
 
@@ -61,7 +85,7 @@ public class Motorista {
     @Override
     public String toString() {
         return "Motorista{" +
-                "idMotorista=" + idMotorista +
+                "idMotorista=" + id +
                 ", nome='" + nome + '\'' +
                 ", tel='" + tel + '\'' +
                 ", cartaConducao='" + cartaConducao + '\'' +

@@ -23,6 +23,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Popup;
+import javafx.stage.Stage;
 import javafx.stage.Window;
 
 public class MotoristaDashboardController {
@@ -376,6 +377,10 @@ public class MotoristaDashboardController {
         setupNotificationPopup();
     }
 
+    public void setNomeUtilizador(String nome) {
+        greetingLabel.setText("Bem-vindo, " + nome + "!");
+    }
+
     // Botões de navegação para o motorista
     @FXML private void historicoViagens() { loadPage("/com/example/projetojavafx/Driver/HistoricoViagens.fxml"); }
     @FXML private void viagensAtivas() { loadPage("/com/example/projetojavafx/Driver/ViagensAtivas.fxml"); }
@@ -393,6 +398,9 @@ public class MotoristaDashboardController {
     private void handleLogout() throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/com/example/projetojavafx/Login.fxml"));
         contentArea.getScene().setRoot(root);
+        // Garantir fullscreen
+        Stage stage = (Stage) contentArea.getScene().getWindow();
+        stage.setMaximized(true);
     }
 
     // Classe interna para notificações

@@ -23,6 +23,7 @@
             <Label fx:id="estadoMotoristaLabel" text="Estado do Motorista:" styleClass="info-label"/>
             <Label fx:id="documentosStatusLabel" text="Estado dos Documentos:" styleClass="info-label"/>
             <Label fx:id="faltasLabel" text="Faltam:" styleClass="faltas-label"/>
+            <Button fx:id="notificarButton" text="Notificar Motorista" styleClass="check-button" onAction="#handleNotificar" disable="true"/>
         </VBox>
 
     </VBox>
