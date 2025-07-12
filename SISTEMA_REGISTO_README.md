@@ -14,7 +14,6 @@ Este sistema implementa um sistema completo de registo e login para motoristas, 
   - Password
   - Telefone
   - Carta de condução
-  - Data de nascimento
 
 ### 2. Sistema de Autenticação Backend
 - **Modelo**: `Usuario.java` - Entidade de usuário

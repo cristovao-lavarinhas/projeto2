@@ -1,10 +1,13 @@
 package com.example.projetojavafx.Modelo;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Motorista {
 
     private String nome;
+    @JsonProperty("tel")
     private String telefone;
     @JsonProperty("cartaConducao")
     private String licenca;
@@ -15,6 +18,10 @@ public class Motorista {
     private DocumentoMotorista documentos = new DocumentoMotorista();
     private Viatura viaturaAssociada;
     private Long id;
+
+    public Motorista() {
+        // Necessário para o Jackson
+    }
 
     public Motorista(String nome, String telefone, String licenca, String estado) {
         this.nome = nome;

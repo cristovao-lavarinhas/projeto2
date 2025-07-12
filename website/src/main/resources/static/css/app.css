@@ -1,0 +1,66 @@
+body {
+    background: #fff;
+    font-family: 'Montserrat', 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+}
+
+.hero-title, h1, h2, h3 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+}
+
+/* ----------  CORES GERAIS  ---------- */
+:root{
+    --ds-black: #000;          /* preto absoluto         */
+    --ds-orange: #ff5a19;      /* laranja DriveSmart      */
+    --ds-grey:  #f2f2f2;
+    --ds-text-muted:#8d8d8d;
+}
+
+/* Barra de topo */
+.topbar{
+    height:56px;
+    background:var(--ds-black);
+    display:flex;align-items:center;
+    padding:0 24px;
+}
+.topbar .logo{height:28px}
+
+/* Wrapper centrado */
+.auth-wrapper{width:360px;margin-top:64px}
+
+/* Títulos */
+.auth-card h1{
+    font-size:24px;font-weight:700;margin-bottom:8px;
+    color:var(--ds-black);
+}
+
+/* Campos */
+.form-control{
+    height:48px;border-radius:8px;font-size:15px;
+}
+
+/* Botão principal – PRETO */
+.btn-drive{
+    background:var(--ds-black);color:#fff;border:none;
+    height:48px;font-weight:600;
+}
+.btn-drive:hover{background:var(--ds-orange)}
+
+/* Botões alternativos – CINZENTO */
+.btn-alt{
+    background:var(--ds-grey);color:var(--ds-black);border:none;height:48px;
+}
+.btn-alt:hover{background:#e8e8e8}
+
+/* Divider “ou”  */
+.divider{position:relative;text-align:center;font-size:13px;color:var(--ds-text-muted)}
+.divider::before{
+    content:"";position:absolute;top:50%;left:0;right:0;height:1px;background:#e6e6e6;
+}
+.divider span{background:#fff;padding:0 8px;position:relative;z-index:1}
+
+/* Pequenos links */
+.link-drive{color:var(--ds-text-muted);text-decoration:none;font-size:14px}
+.link-drive:hover{color:var(--ds-orange)}
+
+.logo-text{color:#fff;font-size:24px;font-weight:700;text-decoration:none}

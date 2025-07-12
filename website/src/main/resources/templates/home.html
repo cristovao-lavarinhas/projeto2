@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DriveSmart</title>
+    <link href="/css/app.css" rel="stylesheet" />
+    <link href="/css/landing.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="topbar">
+        <a href="/" class="logo-text">DriveSmart</a>
+        <div class="nav-actions">
+            <a href="#" class="btn-ajuda" style="margin-right:8px;">Ajuda</a>
+            <a href="/auth/login" class="btn">Iniciar sessão</a>
+            <a href="/auth/register" class="btn btn-signup">Registar</a>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="left-col">
+            <h1 class="hero-title">Vá onde quiser com a DriveSmart</h1>
+            <form class="ride-form">
+                <input type="text" placeholder="Ponto de recolha" required />
+                <input type="text" placeholder="Para onde?" required />
+                <div class="row">
+                    <input type="date" value="" />
+                    <input type="time" value="" />
+                </div>
+                <button class="see-prices" type="submit">Ver preços</button>
+            </form>
+            <div class="login-hint">Inicie sessão para ver as suas últimas actividades</div>
+            <div class="section-title">Sugestões</div>
+            <div class="suggestions">
+                <div class="suggest-title">Viajar</div>
+                <div class="suggest-desc">Vá aonde quiser com a DriveSmart. Peça uma viagem, entre no veículo e dirija-se para o seu destino</div>
+                <img src="/img/car.png" alt="Car" class="suggest-img" />
+                <button class="btn-details">Detalhes</button>
+            </div>
+        </div>
+        <div class="right-col">
+            <div id="map"></div>
+        </div>
+    </main>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var map = L.map('map').setView([41.14961, -8.61099], 13);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '© OpenStreetMap'
+            }).addTo(map);
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(pos) {
+                    var lat = pos.coords.latitude;
+                    var lng = pos.coords.longitude;
+                    map.setView([lat, lng], 14);
+                    L.marker([lat, lng]).addTo(map).bindPopup('Você está aqui!').openPopup();
+                });
+            }
+        });
+    </script>
+</body>
+</html>

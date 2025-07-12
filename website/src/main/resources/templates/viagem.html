@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>DriveSmart – Viagem</title>
+
+    <!-- Bootstrap & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet"/>
+
+    <!-- Leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <link href="/css/app.css" rel="stylesheet"/>
+
+    <style>
+        html,body{height:100%}
+        #map{width:100%;height:100%}
+        .map-wrapper{height:calc(100vh - 56px - 56px)}
+        .request-card{width:320px;background:#fff;border:1px solid #e6e6e6;border-radius:12px;padding:24px;box-shadow:0 4px 16px rgba(0,0,0,.08)}
+        .request-card .form-control{background:#f7f9fc;font-size:14px}
+        .btn-primary-ds{background:var(--ds-black);color:#fff;font-weight:600;border:none}
+        .btn-primary-ds:hover{background:var(--ds-orange)}
+
+        /* autocomplete dropdown */
+        .suggest-wrap{position:relative}
+        .suggest-box{
+            position:absolute;left:0;right:0;top:100%;z-index:1000;
+            max-height:180px;overflow:auto;
+            border:1px solid #e6e6e6;border-top:none;background:#fff;
+            border-bottom-left-radius:8px;border-bottom-right-radius:8px
+        }
+        .suggest-box div{padding:6px 10px;cursor:pointer;font-size:14px;line-height:18px}
+        .suggest-box div:hover{background:#f2f2f2}
+    </style>
+</head>
+<body class="d-flex flex-column min-vh-100">
+<!-- TOPBAR -->
+<header class="topbar"><a href="/" class="logo-text">DriveSmart</a></header>
+
+<!-- NAVBAR -->
+<nav class="ds-navbar navbar navbar-expand-lg bg-white">
+    <div class="container-fluid d-flex justify-content-between align-items-center">
+        <ul class="navbar-nav gap-lg-3 mb-0">
+            <li class="nav-item"><a class="nav-link active" href="/viagem" th:href="@{/viagem}">Viajar</a></li>
+            <li class="nav-item"><a class="nav-link" href="#" th:href="@{/drive}">Conduzir</a></li>
+        </ul>
+        <ul class="navbar-nav gap-lg-3 mb-0 align-items-center">
+            <li class="nav-item"><a class="nav-link" href="#">PT-PT</a></li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle profile-btn" href="#" id="profileMenu" role="button"
+                   data-bs-toggle="dropdown" aria-expanded="false"
+                   th:text="${#authentication.name}">Utilizador</a>
+                <div class="dropdown-menu dropdown-menu-end profile-menu p-0" aria-labelledby="profileMenu">
+                    <div class="dropdown-header px-3 pt-3" th:text="${#authentication.name}">Minha Conta</div>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item px-3" th:href="@{/account}">
+                        <i class="bi bi-person me-2"></i>Gerir conta
+                    </a>
+                    <a class="dropdown-item px-3 logout" th:href="@{/logout}">Terminar sessão</a>
+                </div>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<!-- MAP + FORM -->
+<main class="d-flex flex-grow-1">
+    <aside class="request-card m-4 d-flex flex-column gap-3">
+        <h5>Obter uma viagem</h5>
+
+        <div class="suggest-wrap">
+            <input id="origin" autocomplete="off" class="form-control" placeholder="Local de partida">
+            <div id="originBox" class="suggest-box d-none"></div>
+        </div>
+
+        <div class="suggest-wrap">
+            <input id="destination" autocomplete="off" class="form-control" placeholder="Local de destino">
+            <div id="destBox" class="suggest-box d-none"></div>
+        </div>
+
+        <button id="routeBtn" class="btn btn-primary-ds">Traçar rota</button>
+        <div id="distance" class="small text-muted"></div>
+    </aside>
+
+    <div class="flex-grow-1 map-wrapper"><div id="map"></div></div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        /* ---------- mapa ---------- */
+        const map = L.map('map').setView([41.1579, -8.6291], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap'
+        }).addTo(map);
+        let routeLayer;
+
+        /* ---------- autocomplete ---------- */
+        function attachSuggest(inp, box) {
+            let timer;
+            inp.addEventListener('input', () => {
+                clearTimeout(timer);
+                const q = inp.value.trim();
+                if (q.length < 3) { box.classList.add('d-none'); return; }
+                timer = setTimeout(async () => {
+                    const url = `https://nominatim.openstreetmap.org/search?format=json&limit=5&q=${encodeURIComponent(q)}`;
+                    const data = await fetch(url).then(r => r.json());
+                    box.innerHTML = '';
+                    data.forEach(it => {
+                        const div = document.createElement('div');
+                        div.textContent = it.display_name;
+                        div.onclick = () => { inp.value = it.display_name; box.classList.add('d-none'); };
+                        box.appendChild(div);
+                    });
+                    box.classList.toggle('d-none', data.length === 0);
+                }, 250);
+            });
+            inp.addEventListener('blur', () => setTimeout(() => box.classList.add('d-none'), 200));
+        }
+
+        const originInp = document.getElementById('origin');
+        const destInp   = document.getElementById('destination');
+        attachSuggest(originInp, document.getElementById('originBox'));
+        attachSuggest(destInp,   document.getElementById('destBox'));
+
+        /* ---------- geocode helper ---------- */
+        async function geocode(q) {
+            const u = `https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(q)}`;
+            const d = await fetch(u).then(r => r.json());
+            if (!d.length) throw new Error('Endereço não encontrado');
+            return [parseFloat(d[0].lat), parseFloat(d[0].lon)];
+        }
+
+        /* ---------- traçar rota ---------- */
+        async function trace() {
+            const o = originInp.value.trim();
+            const d = destInp.value.trim();
+            if (!o || !d) return;
+            try {
+                const [olat, olon] = await geocode(o);
+                const [dlat, dlon] = await geocode(d);
+                const url = `https://router.project-osrm.org/route/v1/driving/${olon},${olat};${dlon},${dlat}?overview=full&geometries=geojson`;
+                const json = await fetch(url).then(r => r.json());
+                if (json.code !== 'Ok') throw new Error('Rota indisponível');
+                const coords = json.routes[0].geometry.coordinates.map(([lon,lat]) => [lat,lon]);
+                if (routeLayer) map.removeLayer(routeLayer);
+                routeLayer = L.polyline(coords, { color: 'orange', weight: 5 }).addTo(map);
+                map.fitBounds(routeLayer.getBounds(), { padding: [40,40] });
+                const km  = (json.routes[0].distance/1000).toFixed(1);
+                const min = Math.round(json.routes[0].duration/60);
+                document.getElementById('distance').innerText = `${km} km • ${min} min`;
+            } catch (e) {
+                alert(e.message);
+                console.error(e);
+            }
+        }
+        document.getElementById('routeBtn').addEventListener('click', trace);
+
+        /* ---------- ler query-string de /home ---------- */
+        const qs = new URLSearchParams(window.location.search);
+        const qOrig = qs.get('orig'), qDest = qs.get('dest');
+        if (qOrig) originInp.value = qOrig;
+        if (qDest) destInp.value   = qDest;
+        if (qOrig && qDest) trace();
+    });
+</script>
+</body>
+</html>

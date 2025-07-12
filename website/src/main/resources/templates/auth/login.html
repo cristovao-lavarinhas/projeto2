@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Entrar – DriveSmart</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/app.css" rel="stylesheet">
+</head>
+
+<body class="d-flex flex-column min-vh-100">
+
+<header class="topbar">
+    <a href="/" class="logo-text">DriveSmart</a>
+</header>
+
+<main class="flex-grow-1 d-flex justify-content-center">
+    <form id="loginForm" class="auth-card auth-wrapper">
+        <h1>Qual é o teu e-mail?</h1>
+
+        <!-- E-mail -->
+        <input type="email" id="email" name="email"
+               class="form-control mb-3"
+               placeholder="Introduzir e-mail" required>
+
+        <input type="password" id="password" name="password"
+               class="form-control mb-4"
+               placeholder="Palavra-passe" required>
+
+        <button type="submit" class="btn btn-drive w-100 mb-4" id="loginBtn">
+            <span id="loginBtnText">Continuar</span>
+            <span id="loginBtnSpinner" class="spinner-border spinner-border-sm d-none" role="status"></span>
+        </button>
+
+        <div id="loginMessage" class="alert d-none mb-3"></div>
+
+        <div class="divider mb-3"><span>ou</span></div>
+
+        <button type="button" class="btn btn-alt w-100 mb-3">
+            Continuar com Google
+        </button>
+
+        <hr>
+        <p class="text-center">
+            <a href="/register" class="link-drive">Criar conta</a>
+        </p>
+    </form>
+</main>
+
+<script src="/js/api-client.js"></script>
+<script src="/js/auth-middleware.js"></script>
+<script>
+// Inicializar middleware para redirecionar utilizadores autenticados
+initAuthMiddleware({ redirectAuthenticated: true });
+
+document.addEventListener('DOMContentLoaded', function() {
+    const loginForm = document.getElementById('loginForm');
+    const loginBtn = document.getElementById('loginBtn');
+    const loginBtnText = document.getElementById('loginBtnText');
+    const loginBtnSpinner = document.getElementById('loginBtnSpinner');
+    const loginMessage = document.getElementById('loginMessage');
+
+    loginForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        // Mostrar loading
+        loginBtn.disabled = true;
+        loginBtnText.textContent = 'A entrar...';
+        loginBtnSpinner.classList.remove('d-none');
+        loginMessage.classList.add('d-none');
+
+        try {
+            console.log('Tentando fazer login com:', { email, password: '***' });
+            const response = await api.login(email, password);
+            console.log('Resposta do login:', response);
+            
+            // Login bem-sucedido
+            showMessage('Login realizado com sucesso! A redirecionar...', 'success');
+            
+            // Redirecionar baseado no tipo de utilizador
+            setTimeout(() => {
+                switch(response.tipo) {
+                    case 'ADMIN':
+                        window.location.href = '/dashboard';
+                        break;
+                    case 'MOTORISTA':
+                        window.location.href = '/dashboard';
+                        break;
+                    case 'CLIENTE':
+                        window.location.href = '/dashboard';
+                        break;
+                    default:
+                        window.location.href = '/dashboard';
+                }
+            }, 1500);
+
+        } catch (error) {
+            console.error('Erro no login:', error);
+            showMessage('Credenciais inválidas. Tenta novamente.', 'danger');
+        } finally {
+            // Esconder loading
+            loginBtn.disabled = false;
+            loginBtnText.textContent = 'Continuar';
+            loginBtnSpinner.classList.add('d-none');
+        }
+    });
+
+    function showMessage(message, type) {
+        loginMessage.textContent = message;
+        loginMessage.className = `alert alert-${type} mb-3`;
+        loginMessage.classList.remove('d-none');
+    }
+});
+</script>
+</body>
+</html>

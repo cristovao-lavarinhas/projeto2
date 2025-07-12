@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Criar conta – DriveSmart</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/app.css" rel="stylesheet">
+</head>
+<body class="d-flex flex-column min-vh-100">
+
+<header class="topbar">
+    <a href="/" class="logo-text">DriveSmart</a>
+</header>
+
+<main class="flex-grow-1 d-flex justify-content-center">
+    <form id="registerForm" class="auth-card auth-wrapper">
+        <h1>Criar conta</h1>
+
+        <!-- Tipo de utilizador -->
+        <div class="mb-3">
+            <label class="form-label">Tipo de conta</label>
+            <div class="d-flex gap-2">
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="tipo" id="tipoCliente" value="CLIENTE" checked>
+                    <label class="form-check-label" for="tipoCliente">
+                        Cliente
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="tipo" id="tipoMotorista" value="MOTORISTA">
+                    <label class="form-check-label" for="tipoMotorista">
+                        Motorista
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Campos comuns -->
+        <input type="text" id="nome" name="nome" class="form-control mb-3" placeholder="Nome completo" required>
+        <input type="email" id="email" name="email" class="form-control mb-3" placeholder="E-mail" required>
+        <input type="password" id="password" name="password" class="form-control mb-3" placeholder="Palavra-passe" required>
+        <input type="tel" id="telefone" name="telefone" class="form-control mb-3" placeholder="Telefone" required>
+
+        <!-- Campos específicos do motorista -->
+        <div id="motoristaFields" class="d-none">
+            <input type="text" id="cartaConducao" name="cartaConducao" class="form-control mb-3" placeholder="Número da carta de condução">
+        </div>
+
+        <!-- Campos específicos do cliente -->
+        <div id="clienteFields">
+            <input type="text" id="nif" name="nif" class="form-control mb-3" placeholder="NIF" required>
+        </div>
+
+        <button type="submit" class="btn btn-drive w-100 mb-4" id="registerBtn">
+            <span id="registerBtnText">Registar</span>
+            <span id="registerBtnSpinner" class="spinner-border spinner-border-sm d-none" role="status"></span>
+        </button>
+
+        <div id="registerMessage" class="alert d-none mb-3"></div>
+
+        <hr>
+        <p class="text-center">
+            <a href="/login" class="link-drive">Já tens conta? Entrar</a>
+        </p>
+    </form>
+</main>
+
+<script src="/js/api-client.js"></script>
+<script src="/js/auth-middleware.js"></script>
+<script>
+// Inicializar middleware para redirecionar utilizadores autenticados
+initAuthMiddleware({ redirectAuthenticated: true });
+
+document.addEventListener('DOMContentLoaded', function() {
+    const registerForm = document.getElementById('registerForm');
+    const registerBtn = document.getElementById('registerBtn');
+    const registerBtnText = document.getElementById('registerBtnText');
+    const registerBtnSpinner = document.getElementById('registerBtnSpinner');
+    const registerMessage = document.getElementById('registerMessage');
+    const motoristaFields = document.getElementById('motoristaFields');
+    const clienteFields = document.getElementById('clienteFields');
+    const cartaConducao = document.getElementById('cartaConducao');
+    const nif = document.getElementById('nif');
+
+    // Alternar campos baseado no tipo de utilizador
+    document.querySelectorAll('input[name="tipo"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+            if (this.value === 'MOTORISTA') {
+                motoristaFields.classList.remove('d-none');
+                clienteFields.classList.add('d-none');
+                cartaConducao.required = true;
+                nif.required = false;
+            } else {
+                motoristaFields.classList.add('d-none');
+                clienteFields.classList.remove('d-none');
+                cartaConducao.required = false;
+                nif.required = true;
+            }
+        });
+    });
+
+    registerForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(registerForm);
+        const tipo = formData.get('tipo');
+        
+        // Mostrar loading
+        registerBtn.disabled = true;
+        registerBtnText.textContent = 'A registar...';
+        registerBtnSpinner.classList.remove('d-none');
+        registerMessage.classList.add('d-none');
+
+        try {
+            console.log('Tentando registar:', { tipo, nome: formData.get('nome'), email: formData.get('email') });
+            let response;
+            
+            if (tipo === 'MOTORISTA') {
+                response = await api.registerMotorista({
+                    nome: formData.get('nome'),
+                    email: formData.get('email'),
+                    password: formData.get('password'),
+                    telefone: formData.get('telefone'),
+                    cartaConducao: formData.get('cartaConducao')
+                });
+            } else {
+                response = await api.registerCliente({
+                    nome: formData.get('nome'),
+                    email: formData.get('email'),
+                    password: formData.get('password'),
+                    telefone: formData.get('telefone'),
+                    nif: formData.get('nif')
+                });
+            }
+            console.log('Resposta do registo:', response);
+            
+            // Registo bem-sucedido
+            showMessage('Conta criada com sucesso! A redirecionar para login...', 'success');
+            
+            // Redirecionar para login após 2 segundos
+            setTimeout(() => {
+                window.location.href = '/login';
+            }, 2000);
+
+        } catch (error) {
+            console.error('Erro no registo:', error);
+            let errorMessage = 'Erro ao criar conta. Tenta novamente.';
+            
+            if (error.message.includes('Email já registado')) {
+                errorMessage = 'Já existe uma conta com este e-mail.';
+            }
+            
+            showMessage(errorMessage, 'danger');
+        } finally {
+            // Esconder loading
+            registerBtn.disabled = false;
+            registerBtnText.textContent = 'Registar';
+            registerBtnSpinner.classList.add('d-none');
+        }
+    });
+
+    function showMessage(message, type) {
+        registerMessage.textContent = message;
+        registerMessage.className = `alert alert-${type} mb-3`;
+        registerMessage.classList.remove('d-none');
+    }
+});
+</script>
+</body>
+</html>
